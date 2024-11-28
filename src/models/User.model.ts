@@ -13,6 +13,7 @@ interface CommonAttributes {
     lastLoggedIn?: Date;
     signedUpAs? : SignedUpAs;
     isActive? : boolean;
+    isVerified? : boolean;
     deactivateReasons? : [
         {
             reason: string,

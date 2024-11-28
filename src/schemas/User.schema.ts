@@ -73,6 +73,11 @@ export const UserSchema = new mongoose.Schema({
         required: true,
         default: true,
     },
+    isVerified: {
+        type: Schema.Types.Boolean,
+        required: true,
+        default: false,
+    },
     deactivateReasons: {
         type: [{
             reason: { type: Schema.Types.String, required: true },
