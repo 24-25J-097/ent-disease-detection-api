@@ -57,7 +57,7 @@ export const AuthValidations = {
         .isString()
         .isLength({max: 10})
         .withMessage('Admin ID field should not be more than 10 characters long!'),
-    superAdminToken: () => check('superAdminToken')
+    adminToken: () => check('adminToken')
         .trim()
         .isString()
         .not()

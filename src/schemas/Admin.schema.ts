@@ -1,6 +1,5 @@
 import * as mongoose from "mongoose";
 import {Schema} from "mongoose";
-import { Role } from "../enums/auth";
 import { IAdmin } from "../models/Admin.model";
 import User, { UserSchemaOptions } from "./User.schema";
 
@@ -23,6 +22,6 @@ export const AdminSchema = new mongoose.Schema({
     }
 }, UserSchemaOptions);
 
-export const Admin = User.discriminator<IAdmin>('admins', AdminSchema, "1");
+export const Admin = User.discriminator<IAdmin>('admins', AdminSchema, "admin");
 
 export default Admin;

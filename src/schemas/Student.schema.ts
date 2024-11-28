@@ -1,6 +1,5 @@
 import * as mongoose from "mongoose";
 import {Schema} from "mongoose";
-import { Role } from "../enums/auth";
 import { IStudent } from "../models/Student.model";
 import User, { UserSchemaOptions } from "./User.schema";
 
@@ -9,35 +8,15 @@ export const StudentSchema = new mongoose.Schema({
         type:  Schema.Types.String,
         required: true
     },
-    enrolledCourses: [
-        {
-            type:  Schema.Types.String,
-            required: false
-        }
-    ],
-    yearLevel: {
+    year: {
         type:  Schema.Types.String,
         required: false
     },
-    department: {
+    university: {
         type:  Schema.Types.String,
         required: false
     },
-    semesterGPA: {
-        type:  Schema.Types.Number,
-        required: false
-    },
-    overallGPA: {
-        type:  Schema.Types.Number,
-        required: false
-    },
-    extracurricularActivities: [
-        {
-            type: Schema.Types.String,
-            required: false
-        }
-    ]
 }, UserSchemaOptions);
-export const Student = User.discriminator<IStudent>('students', StudentSchema, "0");
+export const Student = User.discriminator<IStudent>('students', StudentSchema, "student");
 
 export default Student;
