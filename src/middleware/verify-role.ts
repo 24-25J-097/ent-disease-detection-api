@@ -6,7 +6,7 @@ import createHttpError from "http-errors";
 export function verifyRole(roles: Role[]) {
     return function (req: Request, res: Response, next: NextFunction) {
         const ownUser = req.user as IUser;
-        if (ownUser && ownUser.role && roles.includes(<Role>(parseInt(ownUser.role.toString())))) {
+        if (ownUser && ownUser.role && roles.includes(<Role>(ownUser.role.toString()))) {
             next();
         } else {
             throw createHttpError(403, "Permission denied.");
