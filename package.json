@@ -1,0 +1,73 @@
+{
+  "name": "ent-disease-detection-api",
+  "version": "1.0.0",
+  "description": "ENT Disease Detection REST API",
+  "repository": "",
+  "author": "Prashantha K.G.M <it21169908@my.sliit.lk>",
+  "main": ".dist/server.js",
+  "private": true,
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "license": "MIT",
+  "keywords": [
+    "Node",
+    "API",
+    "Express",
+    "Typescript",
+    "Mongoose"
+  ],
+  "scripts": {
+    "start": "nodemon --exec ts-node src/server.ts -e ts",
+    "build": "tsc",
+    "start:prod": "node dist/server.js",
+    "seed": "ts-node src/seed/seed-runner",
+    "lint": "eslint . --ext .ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "envalid": "^7.3.1",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "http-errors": "^2.0.0",
+    "moment-timezone": "^0.5.43",
+    "mongoose": "^7.0.3",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.13",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/http-errors": "^2.0.1",
+    "@types/jest": "^29.5.12",
+    "@types/moment-timezone": "^0.5.30",
+    "@types/morgan": "^1.9.4",
+    "@types/nodemailer": "^6.4.14",
+    "@types/passport": "^1.0.12",
+    "@types/passport-jwt": "^3.0.8",
+    "@types/passport-local": "^1.0.35",
+    "@types/serve-favicon": "^2.5.4",
+    "@types/supertest": "^6.0.2",
+    "@types/winston": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
+    "eslint": "^8.38.0",
+    "jest": "^29.7.0",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
