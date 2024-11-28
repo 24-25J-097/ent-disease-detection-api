@@ -1,8 +1,8 @@
 import { DUser, IUser } from "./User.model";
 
 interface CommonAttributes {
-    radiologistId: string;
-    nic: string;
+    radiologistId?: string;
+    nic?: string;
 }
 
 export interface DRadiologist extends CommonAttributes, DUser {

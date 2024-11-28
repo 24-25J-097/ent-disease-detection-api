@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express from "express";
-import { Authentication } from "./middleware/authentication";
-import { RequestLoggerHandler } from "./middleware/request-logger";
-import { ResponseHandler } from "./middleware/response-handler";
+import {Authentication} from "./middleware/authentication";
+import {RequestLoggerHandler} from "./middleware/request-logger";
+import {ResponseHandler} from "./middleware/response-handler";
 import {jsonErrorHandler} from "./middleware/error-handler";
 import * as routes from "./routes";
 import morgan from "morgan";
@@ -23,10 +23,24 @@ app.use(express.urlencoded({limit: '20mb', extended: true}));
 
 if (!isProduction) {
     app.use(morgan("dev"));
+    // app.use(cors({
+    //     optionsSuccessStatus: 200,
+    //     origin: '*',
+    //     allowedHeaders: ['Content-Type, Access-Control-Allow-Headers, Access-Control-Allow-Origin, Authorization, X-Requested-With', 'Cache-Control']
+    // }));
     app.use(cors({
+        origin: isProduction ? process.env.ALLOWED_ORIGIN : 'http://localhost:3000', //TODO: check?
+        credentials: true, // Allow cookies and credentials
         optionsSuccessStatus: 200,
-        origin: '*',
-        allowedHeaders: ['Content-Type, Access-Control-Allow-Headers, Access-Control-Allow-Origin, Authorization, X-Requested-With', 'Cache-Control']
+        allowedHeaders: [
+            'Content-Type',
+            'Authorization',
+            'X-Requested-With',
+            'source',
+            'platform',
+            'Cache-Control',
+        ],
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Explicitly define allowed HTTP methods
     }));
 } else {
     app.use(morgan('combined'));

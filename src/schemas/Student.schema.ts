@@ -2,11 +2,13 @@ import * as mongoose from "mongoose";
 import {Schema} from "mongoose";
 import { IStudent } from "../models/Student.model";
 import User, { UserSchemaOptions } from "./User.schema";
+import {generateRandomString} from "../utils/utils";
 
 export const StudentSchema = new mongoose.Schema({
     studentId: {
         type:  Schema.Types.String,
-        required: true
+        required: false, // TODO: true
+        default: () => generateRandomString(10),
     },
     year: {
         type:  Schema.Types.String,

@@ -1,8 +1,8 @@
 import { DUser, IUser } from "./User.model";
 
 interface CommonAttributes {
-    adminId: string;
-    nic: string;
+    adminId?: string;
+    nic?: string;
 }
 
 export interface DAdmin extends CommonAttributes, DUser {
