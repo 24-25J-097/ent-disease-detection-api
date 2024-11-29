@@ -73,9 +73,9 @@ export async function loginUser(req: Request, res: Response, next: NextFunction)
     if (validationsChecker(req, res)) {
         UserDao.authenticateUser(email, password, signedUpAs, authTokenValidity(remember))
             .then(async (data: AuthUserData) => {
-                res.cookie('token', data.token, {
-                    httpOnly: true, secure: false, maxAge: Time.getDaysIn(Time.Milliseconds, authTokenValidity(remember))
-                });
+                // res.cookie('token', data.token, {
+                //     httpOnly: true, secure: false, maxAge: Time.getDaysIn(Time.Milliseconds, authTokenValidity(remember))
+                // });
                 res.sendSuccess(data, `User logged as ${Role.getTitle(data.user.role)}!`);
             })
             .catch(next);
