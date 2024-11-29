@@ -12,6 +12,7 @@ export const jsonErrorHandler = (error: unknown | Error, req: Request, res: Resp
         errorMessage = error.message;
     } else if (error instanceof ApplicationError) {
         AppLogger.error(error.message);
+        statusCode = error.statusCode;
         errorMessage = error.message;
     } else if (error instanceof mongoose.Error) {
         errorMessage = error.message;

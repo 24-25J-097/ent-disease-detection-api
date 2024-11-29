@@ -6,7 +6,7 @@ import {AuthUserData} from "../types/util-types";
 import {ApplicationError} from "../utils/application-error";
 import {AppLogger} from "../utils/logging";
 
-const commonPopulates: PopulateOptions[] = [{path: 'photo'}];
+const commonPopulates: PopulateOptions[] = [{path: "photo"}];
 const adminPopulates = [...commonPopulates];
 const doctorPopulates = [...commonPopulates];
 const radiologistPopulates = [...commonPopulates];
@@ -34,27 +34,27 @@ export async function authenticateUser(email: string, password: string, signedUp
             const isMatch = await user.comparePassword(password);
             if (!isMatch) {
                 AppLogger.error(`User logging failed, Incorrect credentials: ${email}`);
-                throw new ApplicationError('Incorrect email/password combination!');
+                throw new ApplicationError('Incorrect email/password combination! 123', 401);
             }
             AppLogger.info(`User logged in as ${signedUpAs} ID: ${user._id}`);
             const token = user.createAccessToken(tokenValidityTime);
             return {token: token, user: user};
         } else {
             AppLogger.error(`User logging failed, Not found with: ${email}`);
-            throw new ApplicationError('User not found in the system!');
+            throw new ApplicationError('User is not found in the system!', 404);
         }
     }
     else if (signedUpAs === SignedUpAs.FACEBOOK) {
         // TODO: facebook
         AppLogger.info(`User tried to login by ${signedUpAs}`);
-        throw new ApplicationError('Please login with email for now!');
+        throw new ApplicationError('Please login with email for now!', 400);
     }
     else if (signedUpAs === SignedUpAs.GOOGLE) {
         // TODO: google
         AppLogger.info(`User tried to login by ${signedUpAs}`);
-        throw new ApplicationError('Please login with email for now!');
+        throw new ApplicationError('Please login with email for now!', 400);
     } else {
-        throw new ApplicationError('Unsupported sign-up method!');
+        throw new ApplicationError('Unsupported sign-up method!', 400);
     }
 }
 
@@ -65,14 +65,14 @@ export async function getAllUsers(ownUser: IUser): Promise<IUser[]> {
         return users;
     } else {
         AppLogger.error(`Get all users: Not Found`);
-        throw new ApplicationError(`Get all users: Users not found!`);
+        throw new ApplicationError(`Get all users: Users not found!`, 404);
     }
 }
 
 export async function getUser(id: Types.ObjectId): Promise<IUser> {
     const user = await User.findById(id).populate(commonPopulates);
     if (!user) {
-        throw new ApplicationError("User not found for ID: " + id);
+        throw new ApplicationError("User is not found for ID: " + id, 404);
     }
     AppLogger.info(`Got user for id, userID: ${user._id}`);
     user.lastLoggedIn = new Date();
@@ -102,21 +102,21 @@ export async function update(userId: Types.ObjectId, userDetails: Partial<IUser>
         return updatedUser;
     } else {
         AppLogger.error(`Update user: Not found user (ID: ${userId})`);
-        throw new ApplicationError(`Update user: User not found for ID: ${userId} !`);
+        throw new ApplicationError(`Update user: User not found for ID: ${userId} !`, 404);
     }
 }
 
 export async function destroy(userId: Types.ObjectId, ownUser: IUser): Promise<IUser> {
     if (ownUser._id === userId) {
         AppLogger.error(`Delete user: cannot delete logged user (ID: ${userId})`);
-        throw new ApplicationError(`Delete user: Cannot Delete user ID: ${userId} !`);
+        throw new ApplicationError(`Delete user: Cannot Delete user ID: ${userId} !`, 400);
     }
 
     const selectedUser = await User.findById(userId);
     if (selectedUser) {
         if (selectedUser?.role.toString() === Role.ADMIN) {
             AppLogger.error(`Delete user: cannot delete admin users (ID: ${userId})`);
-            throw new ApplicationError(`Delete user: Cannot Delete admin user for ID: ${userId} !`);
+            throw new ApplicationError(`Delete user: Cannot Delete admin user for ID: ${userId} !`, 400);
         }
 
         const deleted = await User.findOneAndDelete({_id: userId});
@@ -127,7 +127,7 @@ export async function destroy(userId: Types.ObjectId, ownUser: IUser): Promise<I
         }
     }
     AppLogger.error(`Delete user: Not found user (ID: ${userId})`);
-    throw new ApplicationError(`Delete user: User not found for ID: ${userId} !`);
+    throw new ApplicationError(`Delete user: User not found for ID: ${userId} !`, 404);
 }
 
 export async function deactivate(userId: Types.ObjectId, ownUser: IUser): Promise<IUser> {
@@ -135,13 +135,13 @@ export async function deactivate(userId: Types.ObjectId, ownUser: IUser): Promis
     if (selectedUser) {
         if (selectedUser?.role.toString() === Role.ADMIN) {
             AppLogger.error(`Deactivate user: cannot deactivate admin users (ID: ${userId})`);
-            throw new ApplicationError(`Deactivate user: Cannot Deactivate admin user for ID: ${userId} !`);
+            throw new ApplicationError(`Deactivate user: Cannot Deactivate admin user for ID: ${userId} !`, 400);
         }
 
         const reason = {
             reason: "Self Deactivation",
             deactivatedAt: new Date(),
-            deactivatedBy: ownUser._id
+            deactivatedBy: ownUser._id,
         };
         if (!selectedUser.deactivateReasons) {
             selectedUser.deactivateReasons = [reason];
@@ -156,6 +156,6 @@ export async function deactivate(userId: Types.ObjectId, ownUser: IUser): Promis
     }
 
     AppLogger.error(`Deactivate user: User not found (ID: ${userId})`);
-    throw new ApplicationError(`Deactivate user: User not found for ID: ${userId} !`);
+    throw new ApplicationError(`Deactivate user: User not found for ID: ${userId} !`, 404);
 }
 
