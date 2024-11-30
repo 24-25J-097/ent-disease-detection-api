@@ -19,7 +19,7 @@ const UploadSchemaOptions: mongoose.SchemaOptions = {
         transform: (doc: any, ret: any) => {
             delete ret.path;
             delete ret.isUrl;
-            delete ret.user;
+            delete ret.ownerId;
         }
     },
 };
@@ -29,8 +29,8 @@ const UploadSchema = new mongoose.Schema({
         type: Schema.Types.String,
         required: true,
     },
-    user: {
-        type: Schema.Types.ObjectId,
+    ownerId: {
+        type: Schema.Types.String,
         required: false,
     },
     path: {

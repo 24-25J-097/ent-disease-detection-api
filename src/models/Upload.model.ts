@@ -1,8 +1,8 @@
 import * as mongoose from "mongoose";
-import {Types} from "mongoose";
+import {StringOrObjectId} from "../types/util-types";
 
 export interface DUpload {
-    user?: Types.ObjectId;
+    ownerId?: StringOrObjectId;
     type: string;
     path: string;
     originalName?: string;

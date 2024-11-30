@@ -52,6 +52,8 @@ app.use('/api/static', express.static(favPath.join(__dirname, "../resources")));
 
 app.use('/api/auth', Authentication.verifyToken);
 app.use('/api/admin', Authentication.verifyToken, verifyRole([Role.ADMIN]));
+app.use('/api/doctor', Authentication.verifyToken, verifyRole([Role.DOCTOR]));
+app.use('/api/radiologist', Authentication.verifyToken, verifyRole([Role.RADIOLOGIST]));
 app.use('/api/student', Authentication.verifyToken, verifyRole([Role.STUDENT]));
 routes.initRoutes(app);
 

@@ -6,6 +6,7 @@ export default cleanEnv(process.env, {
     API: url(),
     API_URL: url(),
     CLIENT_URL: url(),
+    FLASK_SERVER_URL: url(),
     TIMEZONE: str(),
     MONGOOSE_URI: str(),
     TEST_MONGOOSE_URI: str(),
