@@ -54,6 +54,10 @@ export const CholesteatomaSchema = new mongoose.Schema({
         enum: ['pending', 'diagnosed', 'failed'],
         default: 'pending'
     },
+    accepted: {
+        type:  Schema.Types.Boolean,
+        required: false
+    },
 }, schemaOptions);
 
 const Cholesteatoma = mongoose.model<ICholesteatoma>("cholesteatoma", CholesteatomaSchema);

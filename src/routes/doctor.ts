@@ -8,5 +8,6 @@ export function DoctorRoutesInit(app: Express) {
 
     /* AUTH ROUTES ===================================== */
     app.post('/api/doctor/diagnosis/cholesteatoma',  upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);
+    app.post('/api/doctor/diagnosis/cholesteatoma/accept', DiagnosisEp.cholesteatomaDiagnosisAccept);
 
 }

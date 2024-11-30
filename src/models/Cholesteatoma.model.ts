@@ -12,6 +12,7 @@ interface CommonAttributes {
         suggestions?: string;
     };
     status?: "pending" | "diagnosed" | "failed";
+    accepted?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }

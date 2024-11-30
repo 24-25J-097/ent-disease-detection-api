@@ -56,6 +56,7 @@ export async function cholesteatomaIdentification(diagnosisId: string, endoscopy
             AppLogger.info(`Fetched cholesteatoma identification results from DL model`);
 
             const diagnosisResults: Partial<DCholesteatoma> = {
+                status: dlModelResponse.data.status, // diagnosed or failed
                 diagnosisResult: {
                     isCholesteatoma: dlModelResponse.data.isCholesteatoma,
                     stage: dlModelResponse.data.stage,
@@ -71,4 +72,23 @@ export async function cholesteatomaIdentification(diagnosisId: string, endoscopy
     } catch (error) {
         throw error;
     }
+}
+
+export async function cholesteatomaDiagnosisAccept(req: Request, res: Response, next: NextFunction) {
+
+    const {accept, diagnosisId} = req.body;
+
+    if (accept === undefined || !diagnosisId) {
+        return res.status(400).send({
+            message: "Acceptance status and Diagnosis id required.",
+        });
+    }
+
+    const data: Partial<DCholesteatoma> = {
+        accepted: accept,
+    }
+
+    await DiagnosisDao.updateCholesteatomaDiagnosis(diagnosisId, data).then(async updatedDiagnosis => {
+        res.sendSuccess(updatedDiagnosis, "Cholesteatoma diagnosis acceptance saved successfully!");
+    }).catch(next);
 }
