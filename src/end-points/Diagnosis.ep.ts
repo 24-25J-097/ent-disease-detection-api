@@ -18,7 +18,7 @@ export async function cholesteatomaDiagnosis(req: Request, res: Response, next: 
     }
 
     const data: Partial<DCholesteatoma> = {
-        diagnosticianId: req.user?._id,
+        diagnosticianId: req.user?._id ?? "6748dfecb90a2d54067a224a", // TODO: for public
         patientId: patientId as string,
         additionalInformation: additionalInfo
     }

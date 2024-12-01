@@ -5,6 +5,7 @@ import {upload} from "../middleware/upload";
 export function DoctorRoutesInit(app: Express) {
 
     /* PUBLIC ROUTES ===================================== */
+    app.post('/api/public/diagnosis/cholesteatoma',  upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);
 
     /* AUTH ROUTES ===================================== */
     app.post('/api/doctor/diagnosis/cholesteatoma',  upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);
