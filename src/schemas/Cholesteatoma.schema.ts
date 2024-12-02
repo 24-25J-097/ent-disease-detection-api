@@ -47,7 +47,16 @@ export const CholesteatomaSchema = new mongoose.Schema({
         suggestions: {
             type: Schema.Types.String,
             required: false
-        }
+        },
+        confidenceScore: {
+            type: Schema.Types.Mixed,
+            required: false
+        },
+        prediction: {
+            type: Schema.Types.String,
+            enum: ['valid', 'invalid', 'N/A'],
+            required: false
+        },
     },
     status: {
         type: Schema.Types.String,

@@ -6,6 +6,7 @@ export function DoctorRoutesInit(app: Express) {
 
     /* PUBLIC ROUTES ===================================== */
     app.post('/api/public/diagnosis/cholesteatoma',  upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);
+    app.post('/api/public/diagnosis/cholesteatoma/accept', DiagnosisEp.cholesteatomaDiagnosisAccept);
 
     /* AUTH ROUTES ===================================== */
     app.post('/api/doctor/diagnosis/cholesteatoma',  upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);
