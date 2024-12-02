@@ -49,7 +49,7 @@ export const CholesteatomaSchema = new mongoose.Schema({
             required: false
         },
         confidenceScore: {
-            type: Schema.Types.Mixed,
+            type: Schema.Types.Number,
             required: false
         },
         prediction: {
