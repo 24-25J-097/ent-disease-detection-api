@@ -12,5 +12,6 @@ export function DoctorRoutesInit(app: Express) {
     app.post('/api/doctor/diagnosis/cholesteatoma',  upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);
     app.post('/api/doctor/diagnosis/cholesteatoma/accept', DiagnosisEp.cholesteatomaDiagnosisAccept);
     app.get('/api/doctor/diagnosis/cholesteatoma/reports', DiagnosisEp.cholesteatomaReports);
+    app.get('/api/doctor/diagnosis/cholesteatoma', DiagnosisEp.cholesteatoma);
 
 }

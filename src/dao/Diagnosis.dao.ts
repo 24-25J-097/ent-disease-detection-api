@@ -205,3 +205,14 @@ export async function getCholesteatomaReports(ownUser: IUser) {
         cholesteatomaVsHealthy
     };
 }
+
+export async function getCholesteatomaData(ownUser: IUser) {
+    const cholesteatomaData = await Cholesteatoma.find();
+    if (cholesteatomaData) {
+        AppLogger.info(`Got cholesteatoma list - Count: ${cholesteatomaData.length} by ${Role.getTitle(ownUser.role)} (ID: ${ownUser._id})`);
+        return cholesteatomaData;
+    } else {
+        AppLogger.error(`Get a cholesteatoma list: Not Found`);
+        throw new ApplicationError(`Get a cholesteatoma list: Cholesteatoma not found!`, 404);
+    }
+}

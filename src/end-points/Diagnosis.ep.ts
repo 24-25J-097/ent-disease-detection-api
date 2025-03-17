@@ -120,3 +120,9 @@ export async function cholesteatomaReports(req: Request, res: Response, next: Ne
     }).catch(next);
 }
 
+export async function cholesteatoma(req: Request, res: Response, next: NextFunction) {
+    const ownUser = req.user as IUser;
+    await DiagnosisDao.getCholesteatomaData(ownUser).then(async data => {
+        res.sendSuccess(data, "Cholesteatoma list fetched successfully!");
+    }).catch(next);
+}
