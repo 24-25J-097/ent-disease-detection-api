@@ -1,5 +1,5 @@
 import {Express} from 'express';
-import * as DiagnosisEp from "../end-points/Diagnosis.ep";
+import * as DiagnosisEp from "../end-points/Cholesteatoma.ep";
 import * as SinusitisDiagnosisEp from "../end-points/SinusitisDiagnosis.ep";
 import {upload} from "../middleware/upload";
 import * as PharyngitisDiagnosisEp from "../end-points/PharyngitisDiagnosis.ep";
@@ -9,6 +9,7 @@ export function DoctorRoutesInit(app: Express) {
     /* PUBLIC ROUTES ===================================== */
     app.post('/api/public/diagnosis/cholesteatoma', upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);
     app.post('/api/public/diagnosis/cholesteatoma/accept', DiagnosisEp.cholesteatomaDiagnosisAccept);
+    app.get('/api/public/diagnosis/cholesteatoma/image/:_id', DiagnosisEp.cholesteatomaImage);
 
 
     app.post('/api/public/diagnosis/sinusitis', upload.single("watersViewXrayImage"), SinusitisDiagnosisEp.sinusitisDiagnosis);
@@ -18,6 +19,8 @@ export function DoctorRoutesInit(app: Express) {
     /* AUTH ROUTES ===================================== */
     app.post('/api/doctor/diagnosis/cholesteatoma', upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);
     app.post('/api/doctor/diagnosis/cholesteatoma/accept', DiagnosisEp.cholesteatomaDiagnosisAccept);
+    app.get('/api/doctor/diagnosis/cholesteatoma/reports', DiagnosisEp.cholesteatomaReports);
+    app.get('/api/doctor/diagnosis/cholesteatoma', DiagnosisEp.cholesteatoma);
 
 
     app.post('/api/doctor/diagnosis/sinusitis', upload.single("watersViewXrayImage"), SinusitisDiagnosisEp.sinusitisDiagnosis);
