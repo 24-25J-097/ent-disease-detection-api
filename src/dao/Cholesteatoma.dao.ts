@@ -195,13 +195,29 @@ export async function getCholesteatomaReports(ownUser: IUser) {
         }
     ];
 
+    const diagnosisAcceptedVsRejected = [
+        {
+            name: "Accepted",
+            value: cholesteatomaData.filter(c => (
+                c.accepted
+            )).length
+        },
+        {
+            name: "Rejected",
+            value: cholesteatomaData.filter(c => (
+                c.accepted === false
+            )).length
+        }
+    ];
+
     AppLogger.info(`Get cholesteatoma reports data (count: ${cholesteatomaData.length}) by (ID: ${ownUser._id})`);
 
     return {
         diagnosisStatus,
         cholesteatomaStages,
         confidenceScores,
-        cholesteatomaVsHealthy
+        cholesteatomaVsHealthy,
+        diagnosisAcceptedVsRejected
     };
 }
 
