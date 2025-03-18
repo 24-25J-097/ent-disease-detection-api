@@ -79,7 +79,7 @@ export async function getSinusitisReports(ownUser: IUser) {
 
     const sinusitisSeverity = [
         {
-            severity: "Mild",
+            severity: "Healthy/Mild",
             count: sinusitisData.filter(c => (
                 c.diagnosisResult?.severity?.includes("Mild")
             )).length
