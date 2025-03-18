@@ -25,8 +25,12 @@ export function DoctorRoutesInit(app: Express) {
     app.get('/api/doctor/diagnosis/sinusitis/reports', SinusitisDiagnosisEp.sinusitisReports);
     app.get('/api/doctor/diagnosis/sinusitis', SinusitisDiagnosisEp.sinusitis);
 
-    
+
     app.post('/api/doctor/diagnosis/pharyngitis', upload.single("throatImage"), PharyngitisDiagnosisEp.pharyngitisDiagnosis);
     app.post('/api/doctor/diagnosis/pharyngitis/accept', PharyngitisDiagnosisEp.pharyngitisDiagnosisAccept);
+
+    app.get('/api/public/diagnosis/pharyngitis/image/:_id', PharyngitisDiagnosisEp.pharyngitisImage);
+    app.get('/api/doctor/diagnosis/pharyngitis/reports', PharyngitisDiagnosisEp.pharyngitisReports);
+    app.get('/api/doctor/diagnosis/pharyngitis', PharyngitisDiagnosisEp.pharyngitis);
 
 }
