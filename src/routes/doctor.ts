@@ -16,6 +16,11 @@ export function DoctorRoutesInit(app: Express) {
     app.post('/api/public/diagnosis/sinusitis/accept', SinusitisDiagnosisEp.sinusitisDiagnosisAccept);
     app.get('/api/public/diagnosis/sinusitis/image/:_id', SinusitisDiagnosisEp.sinusitisImage);
 
+    app.post('/api/public/diagnosis/pharyngitis', upload.single("throatImage"), PharyngitisDiagnosisEp.pharyngitisDiagnosis);
+    app.post('/api/public/diagnosis/pharyngitis/accept', PharyngitisDiagnosisEp.pharyngitisDiagnosisAccept);
+    app.get('/api/public/diagnosis/pharyngitis/image/:_id', PharyngitisDiagnosisEp.pharyngitisImage);
+
+
     /* AUTH ROUTES ===================================== */
     app.post('/api/doctor/diagnosis/cholesteatoma', upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);
     app.post('/api/doctor/diagnosis/cholesteatoma/accept', DiagnosisEp.cholesteatomaDiagnosisAccept);
@@ -31,8 +36,6 @@ export function DoctorRoutesInit(app: Express) {
 
     app.post('/api/doctor/diagnosis/pharyngitis', upload.single("throatImage"), PharyngitisDiagnosisEp.pharyngitisDiagnosis);
     app.post('/api/doctor/diagnosis/pharyngitis/accept', PharyngitisDiagnosisEp.pharyngitisDiagnosisAccept);
-
-    app.get('/api/public/diagnosis/pharyngitis/image/:_id', PharyngitisDiagnosisEp.pharyngitisImage);
     app.get('/api/doctor/diagnosis/pharyngitis/reports', PharyngitisDiagnosisEp.pharyngitisReports);
     app.get('/api/doctor/diagnosis/pharyngitis', PharyngitisDiagnosisEp.pharyngitis);
 
