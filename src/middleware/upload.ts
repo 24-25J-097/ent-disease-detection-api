@@ -32,7 +32,7 @@ const storage = multer.diskStorage({
             // Generate a unique name using the desired format
             const timestamp = new Date().getTime(); // Get timestamp in milliseconds
             const date = new Date().toISOString().slice(0, 10).replace(/-/g, ""); // Remove hyphens
-            const customName = `cholesteatoma_ei_${date}${timestamp}`;
+            const customName = `ent_img_ei_${date}${timestamp}`;
 
             const extension = file.originalname.split('.').pop(); // Extract file extension
             cb(null, `${customName}.${extension}`); // Combine custom name and extension
