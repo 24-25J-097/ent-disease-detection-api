@@ -5,7 +5,6 @@ import {DCholesteatoma, ICholesteatoma} from "../models/Cholesteatoma.model";
 import {ApplicationError} from "../utils/application-error";
 import {DUpload} from "../models/Upload.model";
 import {IUser} from "../models/User.model";
-import User from "../schemas/User.schema";
 import {Role} from "../enums/auth";
 
 export async function createCholesteatomaDiagnosis(data: Partial<DCholesteatoma>, endoscopyImageFile: Express.Multer.File): Promise<ICholesteatoma> {
@@ -214,5 +213,17 @@ export async function getCholesteatomaData(ownUser: IUser) {
     } else {
         AppLogger.error(`Get a cholesteatoma list: Not Found`);
         throw new ApplicationError(`Get a cholesteatoma list: Cholesteatoma not found!`, 404);
+    }
+}
+
+
+export async function getCholesteatomaImage(ownUser: IUser | null, uploadId: string) {
+    const image = await Upload.findOne({_id: uploadId});
+    if (image) {
+        AppLogger.info(`Got cholesteatoma image ${ownUser && `by ${Role.getTitle(ownUser.role)} (ID: ${ownUser._id})`}`);
+        return image.path;
+    } else {
+        AppLogger.error(`Get a cholesteatoma list: Not Found`);
+        throw new ApplicationError("Cholesteatoma image not found", 404);
     }
 }

@@ -1,11 +1,12 @@
 import {NextFunction, Request, Response} from "express";
-import * as DiagnosisDao from "../dao/Diagnosis.dao";
+import * as DiagnosisDao from "../dao/Cholesteatoma.dao";
 import {DCholesteatoma} from "../models/Cholesteatoma.model";
 import env from "../utils/validate-env";
 import axios from 'axios';
 import {AppLogger} from "../utils/logging";
 import * as UserDao from "../dao/User.dao";
 import {IUser} from "../models/User.model";
+import {ApplicationError} from "../utils/application-error";
 
 const fs = require("fs");
 const path = require("path");
@@ -124,5 +125,18 @@ export async function cholesteatoma(req: Request, res: Response, next: NextFunct
     const ownUser = req.user as IUser;
     await DiagnosisDao.getCholesteatomaData(ownUser).then(async data => {
         res.sendSuccess(data, "Cholesteatoma list fetched successfully!");
+    }).catch(next);
+}
+
+export async function cholesteatomaImage(req: Request, res: Response, next: NextFunction) {
+    const ownUser = req.user ? (req.user as IUser) : null;
+    const uploadId = req.params._id;
+    if (!uploadId) {
+        return res.status(400).send({
+            message: "Upload ID is required",
+        });
+    }
+    await DiagnosisDao.getCholesteatomaImage(ownUser, uploadId).then(async imagePath => {
+        res.sendFile(imagePath!);
     }).catch(next);
 }
