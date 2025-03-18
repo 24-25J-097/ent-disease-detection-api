@@ -6,13 +6,15 @@ import {ApplicationError} from "../utils/application-error";
 import {DUpload} from "../models/Upload.model";
 import {IUser} from "../models/User.model";
 import {Role} from "../enums/auth";
+import path from "path";
 
 export async function createCholesteatomaDiagnosis(data: Partial<DCholesteatoma>, endoscopyImageFile: Express.Multer.File): Promise<ICholesteatoma> {
     try {
         const uploadData: DUpload = {
             ownerId: data.patientId,
             type: endoscopyImageFile.mimetype,
-            path: endoscopyImageFile.path,
+            // path: endoscopyImageFile.path,
+            path: `/uploads/${endoscopyImageFile.filename}`,
             originalName: endoscopyImageFile.originalname,
             name: endoscopyImageFile.filename,
             extension: endoscopyImageFile.mimetype.split("/")[1],
@@ -237,7 +239,7 @@ export async function getCholesteatomaImage(ownUser: IUser | null, uploadId: str
     const image = await Upload.findOne({_id: uploadId});
     if (image) {
         AppLogger.info(`Got cholesteatoma image ${ownUser && `by ${Role.getTitle(ownUser.role)} (ID: ${ownUser._id})`}`);
-        return image.path;
+        return path.join(__dirname, `..${image.path}`);
     } else {
         AppLogger.error(`Get a cholesteatoma list: Not Found`);
         throw new ApplicationError("Cholesteatoma image not found", 404);
