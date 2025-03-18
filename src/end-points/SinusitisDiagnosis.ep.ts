@@ -4,6 +4,7 @@ import {DSinusitis} from "../models/Sinusitis.model";
 import env from "../utils/validate-env";
 import axios from 'axios';
 import {AppLogger} from "../utils/logging";
+import {IUser} from "../global";
 
 const fs = require("fs");
 const path = require("path");
@@ -110,3 +111,32 @@ export async function sinusitisDiagnosisAccept(req: Request, res: Response, next
         res.sendSuccess(updatedDiagnosis, "Sinusitis diagnosis acceptance saved successfully!");
     }).catch(next);
 }
+
+export async function sinusitisReports(req: Request, res: Response, next: NextFunction) {
+    const ownUser = req.user as IUser;
+    await DiagnosisDao.getSinusitisReports(ownUser).then(async reportsData => {
+        res.sendSuccess(reportsData, "Sinusitis reports data fetched successfully!");
+    }).catch(next);
+}
+
+export async function sinusitis(req: Request, res: Response, next: NextFunction) {
+    const ownUser = req.user as IUser;
+    await DiagnosisDao.getSinusitisData(ownUser).then(async data => {
+        res.sendSuccess(data, "Sinusitis list fetched successfully!");
+    }).catch(next);
+}
+
+
+export async function sinusitisImage(req: Request, res: Response, next: NextFunction) {
+    const ownUser = req.user ? (req.user as IUser) : null;
+    const uploadId = req.params._id;
+    if (!uploadId) {
+        return res.status(400).send({
+            message: "Upload ID is required",
+        });
+    }
+    await DiagnosisDao.getSinusitisImage(ownUser, uploadId).then(async imagePath => {
+        res.sendFile(imagePath!);
+    }).catch(next);
+}
+
