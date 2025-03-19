@@ -1,12 +1,10 @@
 import {NextFunction, Request, Response} from "express";
-import * as DiagnosisDao from "../dao/Cholesteatoma.dao";
+import * as DiagnosisDao from "../dao/CholesteatomaDiagnosis.dao";
 import {DCholesteatoma} from "../models/Cholesteatoma.model";
 import env from "../utils/validate-env";
 import axios from 'axios';
 import {AppLogger} from "../utils/logging";
-import * as UserDao from "../dao/User.dao";
 import {IUser} from "../models/User.model";
-import {ApplicationError} from "../utils/application-error";
 
 const fs = require("fs");
 const path = require("path");

@@ -12,7 +12,6 @@ import {AppLogger, ErrorLogger} from "../utils/logging";
 import {AuthUserData} from "../types/util-types";
 import {UserValidations} from "../middleware/validations/user-validations";
 import {Types} from "mongoose";
-import {Time} from "../enums/time";
 
 export function updateUserValidationRules(isSelf = false) {
     const rules = [
