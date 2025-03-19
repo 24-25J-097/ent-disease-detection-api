@@ -195,13 +195,31 @@ export async function getSinusitisReports(ownUser: IUser) {
         }
     ];
 
+     const monthlySeverityTrends: { month: string; mild: number; moderate: number; severe: number }[] = [];
+
+    // Group data by month and severity
+    for (let month = 0; month < 12; month++) {
+        const monthData = sinusitisData.filter((c) => {
+            const recordMonth = new Date(c.createdAt!).getMonth();
+            return recordMonth === month;
+        });
+
+        monthlySeverityTrends.push({
+            month: new Date(2024, month, 1).toLocaleString("default", { month: "short" }),
+            mild: monthData.filter(c => c.diagnosisResult?.severity?.includes("Mild")).length,
+            moderate: monthData.filter(c => c.diagnosisResult?.severity?.includes("Moderate")).length,
+            severe: monthData.filter(c => c.diagnosisResult?.severity?.includes("Severe")).length,
+        });
+    }
+
     AppLogger.info(`Get sinusitis reports data (count: ${sinusitisData.length}) by (ID: ${ownUser._id})`);
 
     return {
         diagnosisStatus,
         sinusitisSeverity,
         confidenceScores,
-        sinusitisVsHealthy
+        sinusitisVsHealthy,
+        monthlySeverityTrends
     };
 }
 
