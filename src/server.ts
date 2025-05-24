@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as http from "http";
 import * as https from "https";
 import app from "./app";
-import { Server } from "./global";
+import {Server} from "./global";
 import connectDatabase from "./startup/database";
 import passportStartup from "./startup/passport";
 import env from "./utils/validate-env";
@@ -10,6 +10,8 @@ import {AppLogger, ErrorLogger} from "./utils/logging";
 
 // Load environment variables
 const isProduction = process.env.NODE_ENV === "production";
+console.log("Environment: ", process.env.NODE_ENV)
+
 const port = env.PORT;
 
 // Initialize server variable
