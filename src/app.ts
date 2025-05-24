@@ -23,9 +23,10 @@ app.use(express.urlencoded({limit: '20mb', extended: true}));
 
 if (!isProduction) {
 
+    const defaultOrigins = ['https://entinsight.com', 'https://www.entinsight.com'];
     const allowedOrigin = process.env.ALLOWED_ORIGIN;
-    const allowedOrigins = allowedOrigin?.split(',') ?? [];
-    console.log(`Allowed Origins: ${allowedOrigin}`, allowedOrigins)
+    const allowedOrigins = allowedOrigin?.split(',').concat(defaultOrigins) ?? defaultOrigins;
+    console.log(`Allowed Origins: ${allowedOrigins.join(', ')}`);
 
     app.use(morgan("dev"));
     // app.use(cors({
