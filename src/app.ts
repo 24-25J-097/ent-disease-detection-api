@@ -22,6 +22,11 @@ app.use(express.json({limit: '20mb'}));
 app.use(express.urlencoded({limit: '20mb', extended: true}));
 
 if (!isProduction) {
+
+    const allowedOrigin = process.env.ALLOWED_ORIGIN;
+    const allowedOrigins = allowedOrigin?.split(',') ?? [];
+    console.log(`Allowed Origins: ${allowedOrigin}`, allowedOrigins)
+
     app.use(morgan("dev"));
     // app.use(cors({
     //     optionsSuccessStatus: 200,
@@ -30,7 +35,7 @@ if (!isProduction) {
     // }));
     app.use(cors({
         // origin: isProduction ? process.env.ALLOWED_ORIGIN : 'http://localhost:3000', //TODO: check?
-        origin: process.env.ALLOWED_ORIGIN, //TODO: check?
+        origin: allowedOrigins, //TODO: check?
         credentials: true, // Allow cookies and credentials
         optionsSuccessStatus: 200,
         allowedHeaders: [

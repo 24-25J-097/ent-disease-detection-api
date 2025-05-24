@@ -11,7 +11,6 @@ import {AppLogger, ErrorLogger} from "./utils/logging";
 // Load environment variables
 const isProduction = process.env.NODE_ENV === "production";
 console.log("Environment: ", process.env.NODE_ENV)
-console.log("Allowed Origin: ", process.env.ALLOWED_ORIGIN)
 console.log("Is Production: ", isProduction)
 
 const port = env.PORT;
