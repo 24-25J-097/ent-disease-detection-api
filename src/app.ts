@@ -29,7 +29,8 @@ if (!isProduction) {
     //     allowedHeaders: ['Content-Type, Access-Control-Allow-Headers, Access-Control-Allow-Origin, Authorization, X-Requested-With', 'Cache-Control']
     // }));
     app.use(cors({
-        origin: isProduction ? process.env.ALLOWED_ORIGIN : 'http://localhost:3000', //TODO: check?
+        // origin: isProduction ? process.env.ALLOWED_ORIGIN : 'http://localhost:3000', //TODO: check?
+        origin: process.env.ALLOWED_ORIGIN, //TODO: check?
         credentials: true, // Allow cookies and credentials
         optionsSuccessStatus: 200,
         allowedHeaders: [
