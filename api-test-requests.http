@@ -216,6 +216,229 @@ GET {{baseUrl}}/api/doctor/diagnosis/pharyngitis
 Authorization: Bearer {{authToken}}
 
 ### =============================================
+### Payment System
+### =============================================
+
+### =============================================
+### Package Management
+### =============================================
+
+### Get All Packages (Public)
+GET {{baseUrl}}/api/packages
+Content-Type: application/json
+
+### Get All Packages (Admin)
+GET {{baseUrl}}/admin/packages
+Authorization: Bearer {{authToken}}
+
+### Create Package
+POST {{baseUrl}}/admin/packages
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Basic Plan",
+  "dailyRequestLimit": 50,
+  "durationInDays": 30,
+  "price": 9.99,
+  "isUnlimited": false,
+  "description": "Basic plan with limited API access"
+}
+
+### Get Package by ID
+# Replace {packageId} with an actual package ID
+GET {{baseUrl}}/admin/packages/68334de47d62cb43d9de2b03
+Authorization: Bearer {{authToken}}
+
+### Update Package
+# Replace {packageId} with an actual package ID
+PUT {{baseUrl}}/admin/packages/68334de47d62cb43d9de2b03
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Basic Plan Updated",
+  "dailyRequestLimit": 75,
+  "price": 12.99,
+  "description": "Updated basic plan with more API access"
+}
+
+### Set Package Status (Activate/Deactivate)
+# Replace {packageId} with an actual package ID
+PATCH {{baseUrl}}/admin/packages/68334de47d62cb43d9de2b03/status
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "isActive": true
+}
+
+### Delete Package
+# Replace {packageId} with an actual package ID
+DELETE {{baseUrl}}/admin/packages/68334de47d62cb43d9de2b03
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### User Plan Management
+### =============================================
+
+### Get All User Plans (Admin)
+GET {{baseUrl}}/admin/purchased-plans
+Authorization: Bearer {{authToken}}
+
+### Get Active User Plans (Admin)
+GET {{baseUrl}}/admin/purchased-plans?active=true
+Authorization: Bearer {{authToken}}
+
+### Create User Plan (Admin)
+POST {{baseUrl}}/admin/purchased-plans
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "user": "userId",
+  "package": "packageId",
+  "startDate": "2023-06-01T00:00:00.000Z",
+  "endDate": "2023-07-01T00:00:00.000Z",
+  "paymentMethod": "credit_card",
+  "transactionId": "txn_123456789"
+}
+
+### Get User Plan by ID (Admin)
+# Replace {planId} with an actual plan ID
+GET {{baseUrl}}/admin/purchased-plans/{planId}
+Authorization: Bearer {{authToken}}
+
+### Get User Plans by User ID (Admin)
+# Replace {userId} with an actual user ID
+GET {{baseUrl}}/admin/purchased-plans/user/{userId}
+Authorization: Bearer {{authToken}}
+
+### Update User Plan (Admin)
+# Replace {planId} with an actual plan ID
+PUT {{baseUrl}}/admin/purchased-plans/{planId}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "endDate": "2023-08-01T00:00:00.000Z",
+  "isActive": true
+}
+
+### Cancel User Plan (Admin)
+# Replace {planId} with an actual plan ID
+DELETE {{baseUrl}}/admin/purchased-plans/{planId}
+Authorization: Bearer {{authToken}}
+
+### Get Expired Plans (Admin)
+GET {{baseUrl}}/admin/purchased-plans/expired
+Authorization: Bearer {{authToken}}
+
+### Deactivate Expired Plans (Admin)
+POST {{baseUrl}}/admin/purchased-plans/deactivate-expired
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### User Plan Operations (Authenticated User)
+### =============================================
+
+### Get Active Plan
+GET {{baseUrl}}/api/auth/active-plan
+Authorization: Bearer {{authToken}}
+
+### Get My Plans
+GET {{baseUrl}}/api/auth/my-plans
+Authorization: Bearer {{authToken}}
+
+### Purchase Package
+POST {{baseUrl}}/api/auth/purchase-package
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "packageId": "packageId",
+  "paymentMethod": "credit_card",
+  "transactionId": "txn_123456789"
+}
+
+### Cancel Plan
+# Replace {planId} with an actual plan ID
+DELETE {{baseUrl}}/api/auth/cancel-plan/{planId}
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### Role Access Policies
+### =============================================
+
+### Get All Role Access Policies
+GET {{baseUrl}}/admin/role-access-policies
+Authorization: Bearer {{authToken}}
+
+### Initialize Role Access Policies
+POST {{baseUrl}}/admin/role-access-policies/initialize
+Authorization: Bearer {{authToken}}
+
+### Reset Role Access Policies
+POST {{baseUrl}}/admin/role-access-policies/reset
+Authorization: Bearer {{authToken}}
+
+### Get Role Access Policy by Role
+# Replace {role} with an actual role (admin, doctor, student, etc.)
+GET {{baseUrl}}/admin/role-access-policies/{role}
+Authorization: Bearer {{authToken}}
+
+### Update Role Access Policy
+# Replace {role} with an actual role (admin, doctor, student, etc.)
+PUT {{baseUrl}}/admin/role-access-policies/{role}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "hasUnlimitedAccess": false,
+  "requiresPackage": true,
+  "description": "Updated policy for role"
+}
+
+### Check if Role Has Unlimited Access
+# Replace {role} with an actual role (admin, doctor, student, etc.)
+GET {{baseUrl}}/admin/role-access-policies/{role}/has-unlimited-access
+Authorization: Bearer {{authToken}}
+
+### Check if Role Requires Package
+# Replace {role} with an actual role (admin, doctor, student, etc.)
+GET {{baseUrl}}/admin/role-access-policies/{role}/requires-package
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### Reports
+### =============================================
+
+### Get API Usage by User
+GET {{baseUrl}}/admin/reports/plans/api-usage/by-user
+Authorization: Bearer {{authToken}}
+
+### Get API Usage by User (with date range)
+GET {{baseUrl}}/admin/reports/plans/api-usage/by-user?startDate=2023-01-01&endDate=2023-12-31
+Authorization: Bearer {{authToken}}
+
+### Get API Usage by Endpoint
+GET {{baseUrl}}/admin/reports/plans/api-usage/by-endpoint
+Authorization: Bearer {{authToken}}
+
+### Get Purchase History
+GET {{baseUrl}}/admin/reports/plans/purchase-history
+Authorization: Bearer {{authToken}}
+
+### Get User Plan Status
+GET {{baseUrl}}/admin/reports/plans/user-plans/status
+Authorization: Bearer {{authToken}}
+
+### Get User API Usage
+# Replace {userId} with an actual user ID
+GET {{baseUrl}}/admin/reports/plans/user/{userId}/api-usage
+Authorization: Bearer {{authToken}}
+
+### =============================================
 ### Admin
 ### =============================================
 
