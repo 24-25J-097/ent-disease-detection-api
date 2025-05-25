@@ -3,8 +3,8 @@ import {ErrorLogger} from '../utils/logging';
 
 export function ResponseHandler(req: Request, res: Response, next: NextFunction) {
 
-    res.sendSuccess = (data: any, message: string | null = null) => {
-        res.send({success: true, data: data, message: message});
+    res.sendSuccess = (data: any, message: string | null = null, code = 200) => {
+        res.send({success: true, data: data, message: message}).status(code);
     };
 
     res.sendError = (error: any, errorCode = 500) => {
