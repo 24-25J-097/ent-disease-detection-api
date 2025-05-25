@@ -42,10 +42,7 @@ export async function getAllPackages(req: Request, res: Response) {
         const isPublicRoute = !req.originalUrl.includes('/admin/');
         const packages = await PackageDAO.getAll(isPublicRoute);
 
-        res.sendSuccess({
-            count: packages.length,
-            data: packages
-        });
+        res.sendSuccess(packages);
     } catch (error: any) {
         AppLogger.error(`Get packages error: ${error.message}`);
         res.sendError(error.message || "Error creating package", error.status || 500);

@@ -29,11 +29,7 @@ export async function getAllPolicies(req: Request, res: Response) {
     try {
         const policies = await RoleAccessPolicyDAO.getAll();
 
-        res.status(200).json({
-            success: true,
-            count: policies.length,
-            data: policies
-        });
+        res.sendSuccess(policies);
     } catch (error: any) {
         AppLogger.error(`Get policies error: ${error.message}`);
         res.sendError(error.message || "Error retrieving role access policies", error.status || 500);

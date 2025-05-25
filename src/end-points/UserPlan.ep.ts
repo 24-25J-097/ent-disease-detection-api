@@ -105,10 +105,7 @@ export async function getAllUserPlans(req: Request, res: Response) {
         const activeOnly = req.query.active === 'true';
         const userPlans = await UserPlanDAO.getAll(activeOnly);
 
-        res.sendSuccess({
-            count: userPlans.length,
-            data: userPlans
-        });
+        res.sendSuccess(userPlans);
     } catch (error: any) {
         AppLogger.error(`Get user plans error: ${error.message}`);
         res.sendError(error.message || "Error retrieving user plans", error.status || 500);
