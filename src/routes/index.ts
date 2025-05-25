@@ -1,9 +1,10 @@
-import { Express, Request, Response } from "express";
-import { AdminRoutesInit } from "./admin";
-import { AuthRoutesInit } from "./auth";
+import {Express, Request, Response} from "express";
+import {AdminRoutesInit} from "./admin";
+import {AuthRoutesInit} from "./auth";
 import createHttpError from "http-errors";
 import {DoctorRoutesInit} from "./doctor";
 import {PatientRoutesInit} from "./patient";
+
 
 export function initRoutes(app: Express) {
     /* TOP LEVEL REQUESTS */
