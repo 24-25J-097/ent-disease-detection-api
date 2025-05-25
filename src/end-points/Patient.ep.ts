@@ -144,10 +144,12 @@ export async function deletePatient(req: Request, res: Response) {
 
 // Validation schema for filtering patients
 const filterPatientsSchema = Joi.object({
-    name: Joi.string().optional(),
-    email: Joi.string().optional(),
-    phone: Joi.string().optional(),
-    search: Joi.string().optional(),
+    filter: Joi.object({
+        name: Joi.string().optional(),
+        email: Joi.string().optional(),
+        phone: Joi.string().optional(),
+        search: Joi.string().optional()
+    }).optional()
 });
 
 export async function filterPatients(req: Request, res: Response) {

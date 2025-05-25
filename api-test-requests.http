@@ -73,19 +73,19 @@ GET {{baseUrl}}/api/doctor/patients/{patientId}
 Authorization: Bearer {{authToken}}
 
 ### Filter Patients - Search across all fields
-GET {{baseUrl}}/api/doctor/patients-filter?search=Navod
+GET {{baseUrl}}/api/doctor/patients-filter?filter[search]=Navod
 Authorization: Bearer {{authToken}}
 
 ### Filter Patients - By name
-GET {{baseUrl}}/api/doctor/patients-filter?name=Navod
+GET {{baseUrl}}/api/doctor/patients-filter?filter[name]=Navod
 Authorization: Bearer {{authToken}}
 
 ### Filter Patients - By email
-GET {{baseUrl}}/api/doctor/patients-filter?email=gmail.com
+GET {{baseUrl}}/api/doctor/patients-filter?filter[email]=gmail.com
 Authorization: Bearer {{authToken}}
 
 ### Filter Patients - By phone
-GET {{baseUrl}}/api/doctor/patients-filter?phone=+94
+GET {{baseUrl}}/api/doctor/patients-filter?filter[phone]=+94
 Authorization: Bearer {{authToken}}
 
 ### Update Patient
