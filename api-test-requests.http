@@ -425,6 +425,14 @@ Authorization: Bearer {{authToken}}
 GET {{baseUrl}}/api/admin/reports/plans/api-usage/by-endpoint
 Authorization: Bearer {{authToken}}
 
+### Get All API Usage
+GET {{baseUrl}}/api/admin/reports/plans/api-usage
+Authorization: Bearer {{authToken}}
+
+### Get All API Usage (with date range)
+GET {{baseUrl}}/api/admin/reports/plans/api-usage?startDate=2023-01-01&endDate=2023-12-31
+Authorization: Bearer {{authToken}}
+
 ### Get Purchase History
 GET {{baseUrl}}/api/admin/reports/plans/purchase-history
 Authorization: Bearer {{authToken}}

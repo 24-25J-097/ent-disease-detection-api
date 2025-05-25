@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import {RequestLogDAO} from "../dao/RequestLog.dao";
 import {AppLogger} from "../utils/logging";
 import {UserPlan} from "../schemas/UserPlan.schema";
+import {RequestLog} from "../schemas/RequestLog.schema";
 
 
 /**
@@ -217,6 +218,53 @@ export async function getUserApiUsage(req: Request, res: Response) {
         AppLogger.error(`User API usage report error: ${error.message}`);
 
         res.sendError(error.message || "Error generating user API usage report", error.status || 500);
+    }
+}
+
+/**
+ * Get all API usage data within a date range
+ * @route GET /api/admin/reports/plans/api-usage
+ */
+export async function getAllUsage(req: Request, res: Response) {
+    try {
+        // Parse date range from query parameters
+        const {startDate, endDate} = parseReportDateRange(req);
+
+        // Get all request logs within the date range
+        const logs = await RequestLog.find({
+            timestamp: {
+                $gte: startDate,
+                $lte: endDate
+            }
+        }).populate('user', 'name email role')
+          .sort({timestamp: -1});
+
+        // Group by day for summary
+        const dailySummary = logs.reduce((acc: any, log) => {
+            const date = new Date(log.timestamp).toISOString().split('T')[0];
+
+            if (!acc[date]) {
+                acc[date] = {
+                    date,
+                    count: 0
+                };
+            }
+
+            acc[date].count++;
+            return acc;
+        }, {});
+
+        const dailySummaryArray = Object.values(dailySummary);
+
+        res.sendSuccess({
+            dateRange: {startDate, endDate},
+            totalRequests: logs.length,
+            dailySummary: dailySummaryArray,
+            data: logs
+        });
+    } catch (error: any) {
+        AppLogger.error(`Get all API usage error: ${error.message}`);
+        res.sendError(error.message || "Error retrieving API usage data", error.status || 500);
     }
 }
 

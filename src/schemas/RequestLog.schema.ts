@@ -4,7 +4,7 @@ import {IRequestLog} from "../models/RequestLog.model";
 export const RequestLogSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'users',
         required: true
     },
     endpoint: {
