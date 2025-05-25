@@ -15,11 +15,7 @@ export async function getApiUsageByUser(req: Request, res: Response) {
 
         const usageData = await RequestLogDAO.getRequestsByUser(startDate, endDate);
 
-        res.sendSuccess({
-            count: usageData.length,
-            dateRange: {startDate, endDate},
-            data: usageData
-        });
+        res.sendSuccess(usageData);
     } catch (error: any) {
         AppLogger.error(`API usage report error: ${error.message}`);
         res.sendError(error.message || "Error generating API usage report", error.status || 500);
