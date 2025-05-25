@@ -51,7 +51,7 @@ export function AdminRoutesInit(app: Express) {
 
     // packages Reports
     app.get("/api/admin/reports/plans/purchase-history", ReportEp.getPurchaseHistory);
-    app.get("/api/admin/reports/plans/api-usage", ReportEp.getUserApiUsage);
+    app.get("/api/admin/reports/plans/api-usage", ReportEp.getAllUsage);
     app.get("/api/admin/reports/plans/api-usage/:userId", ReportEp.getUserApiUsage);
     app.get("/api/admin/reports/plans/api-usage/by-user", ReportEp.getApiUsageByUser);
     app.get("/api/admin/reports/plans/api-usage/by-endpoint", ReportEp.getApiUsageByEndpoint);
