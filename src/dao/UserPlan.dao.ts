@@ -5,6 +5,7 @@ import {Package} from "../schemas/Package.schema";
 import {UserPlan} from "../schemas/UserPlan.schema";
 import {AppLogger} from "../utils/logging";
 import {ApplicationError} from "../utils/application-error";
+import {RequestLogDAO} from "./RequestLog.dao";
 
 export class UserPlanDAO {
     /**
@@ -40,15 +41,27 @@ export class UserPlanDAO {
     /**
      * Get all user plans
      * @param activeOnly If true, only return active plans
-     * @returns Promise with array of user plans
+     * @returns Promise with array of user plans with today's usage count
      */
     static async getAll(activeOnly = false): Promise<IUserPlan[]> {
         try {
             const query = activeOnly ? {isActive: true} : {};
-            return await UserPlan.find(query)
+            const userPlans = await UserPlan.find(query)
                 .populate('user', 'name email role')
                 .populate('package', 'name dailyRequestLimit durationInDays price isUnlimited')
                 .sort({createdAt: -1});
+
+            // Add today's usage count for each user
+            return await Promise.all(userPlans.map(async (plan) => {
+                const userId = plan.user._id || plan.user;
+                const usageToday = await RequestLogDAO.countTodayRequests(userId);
+
+                // Convert to plain object to add the new property
+                const planObject = plan.toObject();
+                planObject.usageToday = usageToday;
+
+                return planObject;
+            }));
         } catch (error) {
             if (error instanceof Error) {
                 AppLogger.error(`Get all user plan Package: ${error.message}`);
