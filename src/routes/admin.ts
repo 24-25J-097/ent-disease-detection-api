@@ -23,36 +23,37 @@ export function AdminRoutesInit(app: Express) {
     app.delete('/api/admin/patients/:id', PatientEp.deletePatient);
 
     // Plans
-    app.get("/admin/packages/", PackageEp.getAllPackages);
-    app.post("/admin/packages/", PackageEp.createPackage);
-    app.get("/admin/packages/:id", PackageEp.getPackageById);
-    app.put("/admin/packages/:id", PackageEp.updatePackage);
-    app.delete("/admin/packages/:id", PackageEp.deletePackage);
-    app.patch("/admin/packages/:id/status", PackageEp.setPackageStatus);
-
-    // packages Reports
-    app.get("/admin/reports/plans/api-usage/by-user", ReportEp.getApiUsageByUser);
-    app.get("/admin/reports/plans/api-usage/by-endpoint", ReportEp.getApiUsageByEndpoint);
-    app.get("/admin/reports/plans/purchase-history", ReportEp.getPurchaseHistory);
-    app.get("/admin/reports/plans/user-plans/status", ReportEp.getUserPlanStatus);
-    app.get("/admin/reports/plans/user/:userId/api-usage", ReportEp.getUserApiUsage);
+    app.get("/api/admin/packages/", PackageEp.getAllPackages);
+    app.post("/api/admin/packages/", PackageEp.createPackage);
+    app.patch("/api/admin/packages/:id/status", PackageEp.setPackageStatus);
+    app.get("/api/admin/packages/:id", PackageEp.getPackageById);
+    app.put("/api/admin/packages/:id", PackageEp.updatePackage);
+    app.delete("/api/admin/packages/:id", PackageEp.deletePackage);
 
     // Role access policies
-    app.get("/admin/role-access-policies/", RoleAccessPolicyEp.getAllPolicies);
-    app.post("/admin/role-access-policies/initialize", RoleAccessPolicyEp.initializePolicies);
-    app.post("/admin/role-access-policies/reset", RoleAccessPolicyEp.resetPolicies);
-    app.get("/admin/role-access-policies/:role", RoleAccessPolicyEp.getPolicyByRole);
-    app.put("/admin/role-access-policies/:role", RoleAccessPolicyEp.updatePolicy);
-    app.get("/admin/role-access-policies/:role/has-unlimited-access", RoleAccessPolicyEp.hasUnlimitedAccess);
-    app.get("/admin/role-access-policies/:role/requires-package", RoleAccessPolicyEp.requiresPackage);
+    app.get("/api/admin/role-access-policies/", RoleAccessPolicyEp.getAllPolicies);
+    app.post("/api/admin/role-access-policies/initialize", RoleAccessPolicyEp.initializePolicies);
+    app.post("/api/admin/role-access-policies/reset", RoleAccessPolicyEp.resetPolicies);
+    app.get("/api/admin/role-access-policies/:role", RoleAccessPolicyEp.getPolicyByRole);
+    app.put("/api/admin/role-access-policies/:role", RoleAccessPolicyEp.updatePolicy);
+    app.get("/api/admin/role-access-policies/:role/has-unlimited-access", RoleAccessPolicyEp.hasUnlimitedAccess);
+    app.get("/api/admin/role-access-policies/:role/requires-package", RoleAccessPolicyEp.requiresPackage);
 
     // User Purchased Packages
-    app.get("/admin/purchased-plans/", UserPlanEp.getAllUserPlans);
-    app.post("/admin/purchased-plans/", UserPlanEp.createUserPlan);
-    app.get("/admin/purchased-plans/expired", UserPlanEp.getExpiredPlans);
-    app.post("/admin/purchased-plans/deactivate-expired", UserPlanEp.deactivateExpiredPlans);
-    app.get("/admin/purchased-plans/user/:userId", UserPlanEp.getUserPlans);
-    app.get("/admin/purchased-plans/:id", UserPlanEp.getUserPlanById);
-    app.put("/admin/purchased-plans/:id", UserPlanEp.updateUserPlan);
-    app.delete("/admin/purchased-plans/:id", UserPlanEp.cancelUserPlan);
+    app.get("/api/admin/purchased-plans/", UserPlanEp.getAllUserPlans);
+    app.post("/api/admin/purchased-plans/", UserPlanEp.createUserPlan);
+    app.get("/api/admin/purchased-plans/expired", UserPlanEp.getExpiredPlans);
+    app.post("/api/admin/purchased-plans/deactivate-expired", UserPlanEp.deactivateExpiredPlans);
+    app.get("/api/admin/purchased-plans/user/:userId", UserPlanEp.getUserPlans);
+    app.get("/api/admin/purchased-plans/:id", UserPlanEp.getUserPlanById);
+    app.put("/api/admin/purchased-plans/:id", UserPlanEp.updateUserPlan);
+    app.delete("/api/admin/purchased-plans/:id", UserPlanEp.cancelUserPlan);
+
+    // packages Reports
+    app.get("/api/admin/reports/plans/api-usage/by-user", ReportEp.getApiUsageByUser);
+    app.get("/api/admin/reports/plans/api-usage/by-endpoint", ReportEp.getApiUsageByEndpoint);
+    app.get("/api/admin/reports/plans/purchase-history", ReportEp.getPurchaseHistory);
+    app.get("/api/admin/reports/plans/user-plans/status", ReportEp.getUserPlanStatus);
+    app.get("/api/admin/reports/plans/user/:userId/api-usage", ReportEp.getUserApiUsage);
+
 }

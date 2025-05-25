@@ -228,11 +228,11 @@ GET {{baseUrl}}/api/packages
 Content-Type: application/json
 
 ### Get All Packages (Admin)
-GET {{baseUrl}}/admin/packages
+GET {{baseUrl}}/api/admin/packages
 Authorization: Bearer {{authToken}}
 
 ### Create Package
-POST {{baseUrl}}/admin/packages
+POST {{baseUrl}}/api/admin/packages
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -247,12 +247,12 @@ Authorization: Bearer {{authToken}}
 
 ### Get Package by ID
 # Replace {packageId} with an actual package ID
-GET {{baseUrl}}/admin/packages/68334de47d62cb43d9de2b03
+GET {{baseUrl}}/api/admin/packages/68334de47d62cb43d9de2b03
 Authorization: Bearer {{authToken}}
 
 ### Update Package
 # Replace {packageId} with an actual package ID
-PUT {{baseUrl}}/admin/packages/68334de47d62cb43d9de2b03
+PUT {{baseUrl}}/api/admin/packages/68334de47d62cb43d9de2b03
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -265,7 +265,7 @@ Authorization: Bearer {{authToken}}
 
 ### Set Package Status (Activate/Deactivate)
 # Replace {packageId} with an actual package ID
-PATCH {{baseUrl}}/admin/packages/68334de47d62cb43d9de2b03/status
+PATCH {{baseUrl}}/api/admin/packages/68334de47d62cb43d9de2b03/status
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -275,7 +275,7 @@ Authorization: Bearer {{authToken}}
 
 ### Delete Package
 # Replace {packageId} with an actual package ID
-DELETE {{baseUrl}}/admin/packages/68334de47d62cb43d9de2b03
+DELETE {{baseUrl}}/api/admin/packages/68334de47d62cb43d9de2b03
 Authorization: Bearer {{authToken}}
 
 ### =============================================
@@ -283,21 +283,21 @@ Authorization: Bearer {{authToken}}
 ### =============================================
 
 ### Get All User Plans (Admin)
-GET {{baseUrl}}/admin/purchased-plans
+GET {{baseUrl}}/api/admin/purchased-plans
 Authorization: Bearer {{authToken}}
 
 ### Get Active User Plans (Admin)
-GET {{baseUrl}}/admin/purchased-plans?active=true
+GET {{baseUrl}}/api/admin/purchased-plans?active=true
 Authorization: Bearer {{authToken}}
 
 ### Create User Plan (Admin)
-POST {{baseUrl}}/admin/purchased-plans
+POST {{baseUrl}}/api/admin/purchased-plans
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
   "user": "userId",
-  "package": "packageId",
+  "package": "68334de47d62cb43d9de2b03",
   "startDate": "2023-06-01T00:00:00.000Z",
   "endDate": "2023-07-01T00:00:00.000Z",
   "paymentMethod": "credit_card",
@@ -306,17 +306,17 @@ Authorization: Bearer {{authToken}}
 
 ### Get User Plan by ID (Admin)
 # Replace {planId} with an actual plan ID
-GET {{baseUrl}}/admin/purchased-plans/{planId}
+GET {{baseUrl}}/api/admin/purchased-plans/{planId}
 Authorization: Bearer {{authToken}}
 
 ### Get User Plans by User ID (Admin)
 # Replace {userId} with an actual user ID
-GET {{baseUrl}}/admin/purchased-plans/user/{userId}
+GET {{baseUrl}}/api/admin/purchased-plans/user/{userId}
 Authorization: Bearer {{authToken}}
 
 ### Update User Plan (Admin)
 # Replace {planId} with an actual plan ID
-PUT {{baseUrl}}/admin/purchased-plans/{planId}
+PUT {{baseUrl}}/api/admin/purchased-plans/{planId}
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -327,15 +327,15 @@ Authorization: Bearer {{authToken}}
 
 ### Cancel User Plan (Admin)
 # Replace {planId} with an actual plan ID
-DELETE {{baseUrl}}/admin/purchased-plans/{planId}
+DELETE {{baseUrl}}/api/admin/purchased-plans/{planId}
 Authorization: Bearer {{authToken}}
 
 ### Get Expired Plans (Admin)
-GET {{baseUrl}}/admin/purchased-plans/expired
+GET {{baseUrl}}/api/admin/purchased-plans/expired
 Authorization: Bearer {{authToken}}
 
 ### Deactivate Expired Plans (Admin)
-POST {{baseUrl}}/admin/purchased-plans/deactivate-expired
+POST {{baseUrl}}/api/admin/purchased-plans/deactivate-expired
 Authorization: Bearer {{authToken}}
 
 ### =============================================
@@ -371,25 +371,25 @@ Authorization: Bearer {{authToken}}
 ### =============================================
 
 ### Get All Role Access Policies
-GET {{baseUrl}}/admin/role-access-policies
+GET {{baseUrl}}/api/admin/role-access-policies
 Authorization: Bearer {{authToken}}
 
 ### Initialize Role Access Policies
-POST {{baseUrl}}/admin/role-access-policies/initialize
+POST {{baseUrl}}/api/admin/role-access-policies/initialize
 Authorization: Bearer {{authToken}}
 
 ### Reset Role Access Policies
-POST {{baseUrl}}/admin/role-access-policies/reset
+POST {{baseUrl}}/api/admin/role-access-policies/reset
 Authorization: Bearer {{authToken}}
 
 ### Get Role Access Policy by Role
 # Replace {role} with an actual role (admin, doctor, student, etc.)
-GET {{baseUrl}}/admin/role-access-policies/{role}
+GET {{baseUrl}}/api/admin/role-access-policies/{role}
 Authorization: Bearer {{authToken}}
 
 ### Update Role Access Policy
 # Replace {role} with an actual role (admin, doctor, student, etc.)
-PUT {{baseUrl}}/admin/role-access-policies/{role}
+PUT {{baseUrl}}/api/admin/role-access-policies/{role}
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -401,12 +401,12 @@ Authorization: Bearer {{authToken}}
 
 ### Check if Role Has Unlimited Access
 # Replace {role} with an actual role (admin, doctor, student, etc.)
-GET {{baseUrl}}/admin/role-access-policies/{role}/has-unlimited-access
+GET {{baseUrl}}/api/admin/role-access-policies/{role}/has-unlimited-access
 Authorization: Bearer {{authToken}}
 
 ### Check if Role Requires Package
 # Replace {role} with an actual role (admin, doctor, student, etc.)
-GET {{baseUrl}}/admin/role-access-policies/{role}/requires-package
+GET {{baseUrl}}/api/admin/role-access-policies/{role}/requires-package
 Authorization: Bearer {{authToken}}
 
 ### =============================================
@@ -414,28 +414,28 @@ Authorization: Bearer {{authToken}}
 ### =============================================
 
 ### Get API Usage by User
-GET {{baseUrl}}/admin/reports/plans/api-usage/by-user
+GET {{baseUrl}}/api/admin/reports/plans/api-usage/by-user
 Authorization: Bearer {{authToken}}
 
 ### Get API Usage by User (with date range)
-GET {{baseUrl}}/admin/reports/plans/api-usage/by-user?startDate=2023-01-01&endDate=2023-12-31
+GET {{baseUrl}}/api/admin/reports/plans/api-usage/by-user?startDate=2023-01-01&endDate=2023-12-31
 Authorization: Bearer {{authToken}}
 
 ### Get API Usage by Endpoint
-GET {{baseUrl}}/admin/reports/plans/api-usage/by-endpoint
+GET {{baseUrl}}/api/admin/reports/plans/api-usage/by-endpoint
 Authorization: Bearer {{authToken}}
 
 ### Get Purchase History
-GET {{baseUrl}}/admin/reports/plans/purchase-history
+GET {{baseUrl}}/api/admin/reports/plans/purchase-history
 Authorization: Bearer {{authToken}}
 
 ### Get User Plan Status
-GET {{baseUrl}}/admin/reports/plans/user-plans/status
+GET {{baseUrl}}/api/admin/reports/plans/user-plans/status
 Authorization: Bearer {{authToken}}
 
 ### Get User API Usage
 # Replace {userId} with an actual user ID
-GET {{baseUrl}}/admin/reports/plans/user/{userId}/api-usage
+GET {{baseUrl}}/api/admin/reports/plans/user/{userId}/api-usage
 Authorization: Bearer {{authToken}}
 
 ### =============================================

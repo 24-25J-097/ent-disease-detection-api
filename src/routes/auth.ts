@@ -29,11 +29,11 @@ export function AuthRoutesInit(app: Express) {
     /* PRICING ROUTES ===================================== */
 
     // Get active plan for current user
-    app.get("/active-plan", UserPlanEp.getActivePlan);
+    app.get("/api/auth/active-plan", UserPlanEp.getActivePlan);
     // Get all plans for current user
-    app.get("/my-plans", UserPlanEp.getUserPlans);
+    app.get("/api/auth/my-plans", UserPlanEp.getUserPlans);
     // Purchase a package
-    app.post("/purchase-package", UserPlanEp.purchasePackage);
+    app.post("/api/auth/purchase-package", UserPlanEp.purchasePackage);
     // Cancel a plan
-    app.delete("/cancel-plan/:id", UserPlanEp.cancelUserPlan);
+    app.delete("/api/auth/cancel-plan/:id", UserPlanEp.cancelUserPlan);
 }
