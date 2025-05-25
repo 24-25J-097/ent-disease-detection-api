@@ -24,4 +24,5 @@ export interface IUserPlan extends mongoose.Document, DUserPlan {
     readonly _id: mongoose.Types.ObjectId;
     user: IUser['_id'] | IUser;
     package: IPackage['_id'] | IPackage;
+    usageToday?: number; // Optional property for tracking today's API usage (not stored in DB)
 }
