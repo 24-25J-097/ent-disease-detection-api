@@ -107,11 +107,7 @@ export async function getPurchaseHistory(req: Request, res: Response) {
             }
         ]);
 
-        res.sendSuccess({
-            count: userPlans.length,
-            dateRange: {startDate, endDate},
-            data: userPlans
-        });
+        res.sendSuccess(userPlans);
     } catch (error: any) {
         AppLogger.error(`Purchase history report error: ${error.message}`);
         res.sendError(error.message || "Error generating API purchase history report", error.status || 500);
