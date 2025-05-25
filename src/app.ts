@@ -11,6 +11,8 @@ import favicon from 'serve-favicon';
 import * as favPath from 'path';
 import {Role} from "./enums/auth";
 import {verifyRole} from "./middleware/verify-role";
+import {apiAccessControl} from "./middleware/api-access-control";
+import {RoleAccessPolicyDAO} from "./dao/RoleAccessPolicy.dao";
 
 const isProduction = process.env.NODE_ENV === "production";
 const app = express();
@@ -59,12 +61,43 @@ if (!isProduction) {
 app.use(favicon(favPath.join(__dirname, "../resources", "favicon.ico")));
 app.use('/api/static', express.static(favPath.join(__dirname, "../resources")));
 
+// Initialize role access policies
+(async () => {
+    try {
+        await RoleAccessPolicyDAO.initialize();
+    } catch (error) {
+        console.error('Error initializing role access policies:', error);
+    }
+})();
+
+// Authentication middleware for all protected routes
 app.use('/api/auth', Authentication.verifyToken);
+
+// API access control middleware for authenticated routes
+// Exclude plan management routes
+app.use('/api/auth', (req, res, next) => {
+    // Skip API access control for plan management routes
+    if (
+        req.path === '/active-plan' ||
+        req.path === '/my-plans' ||
+        req.path === '/purchase-package' ||
+        req.path.startsWith('/cancel-plan/')
+    ) {
+        return next();
+    }
+
+    // Apply API access control to all other authenticated routes
+    return apiAccessControl(req, res, next);
+});
+
+// Admin routes - bypass API access control
 app.use('/api/admin', Authentication.verifyToken, verifyRole([Role.ADMIN]));
-app.use('/api/doctor', Authentication.verifyToken, verifyRole([Role.DOCTOR]));
-app.use('/api/radiologist', Authentication.verifyToken, verifyRole([Role.RADIOLOGIST]));
-app.use('/api/student', Authentication.verifyToken, verifyRole([Role.STUDENT]));
-app.use('/api/patient', Authentication.verifyToken, verifyRole([Role.PATIENT]));
+
+// Role-specific routes with API access control
+app.use('/api/doctor', Authentication.verifyToken, verifyRole([Role.DOCTOR]), apiAccessControl);
+app.use('/api/radiologist', Authentication.verifyToken, verifyRole([Role.RADIOLOGIST]), apiAccessControl);
+app.use('/api/student', Authentication.verifyToken, verifyRole([Role.STUDENT]), apiAccessControl);
+app.use('/api/patient', Authentication.verifyToken, verifyRole([Role.PATIENT]), apiAccessControl);
 routes.initRoutes(app);
 
 // Error Handling
