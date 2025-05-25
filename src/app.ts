@@ -21,9 +21,9 @@ app.use(ResponseHandler);
 app.use(express.json({limit: '20mb'}));
 app.use(express.urlencoded({limit: '20mb', extended: true}));
 
-if (!isProduction) {
+const defaultOrigins = ['https://entinsight.com', 'https://www.entinsight.com'];
 
-    const defaultOrigins = ['https://entinsight.com', 'https://www.entinsight.com'];
+if (!isProduction) {
     const allowedOrigin = process.env.ALLOWED_ORIGIN;
     const allowedOrigins = allowedOrigin?.split(',').concat(defaultOrigins) ?? defaultOrigins;
     console.log(`Allowed Origins: ${allowedOrigins.join(', ')}`);
@@ -51,7 +51,9 @@ if (!isProduction) {
     }));
 } else {
     app.use(morgan('combined'));
-    app.use(cors());
+    app.use(cors({
+        origin: defaultOrigins
+    }));
 }
 
 app.use(favicon(favPath.join(__dirname, "../resources", "favicon.ico")));
