@@ -1,0 +1,244 @@
+### ENT Disease Detection API Test Requests
+# This file contains HTTP requests for testing the ENT Disease Detection API
+# It can be used with REST Client extension in VS Code or similar tools in JetBrains IDEs
+
+@baseUrl = http://localhost:5000
+@authToken = {{authToken}}
+
+### =============================================
+### Authentication
+### =============================================
+
+### Login
+POST {{baseUrl}}/api/public/login
+Content-Type: application/json
+
+{
+  "email": "doctor@example.com",
+  "password": "password123"
+}
+
+### Register
+POST {{baseUrl}}/api/public/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "password123",
+  "role": "doctor"
+}
+
+### Get Current User
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{authToken}}
+
+### Update Current User
+PUT {{baseUrl}}/api/auth/me
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "John Doe Updated",
+  "phone": "+94712345678"
+}
+
+### =============================================
+### Patient Management
+### =============================================
+
+### Create Patient
+POST {{baseUrl}}/api/doctor/patients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "firstName": "Navod",
+  "lastName": "Hansajith",
+  "email": "hansajith18@gmail.com",
+  "password": "123456@aA",
+  "phone": "+94712345678",
+  "address": "",
+  "dateOfBirth": "1993-02-16",
+  "gender": "male"
+}
+
+### Get All Patients
+GET {{baseUrl}}/api/doctor/patients
+Authorization: Bearer {{authToken}}
+
+### Get Patient by ID
+# Replace {patientId} with an actual patient ID
+GET {{baseUrl}}/api/doctor/patients/{patientId}
+Authorization: Bearer {{authToken}}
+
+### Filter Patients - Search across all fields
+GET {{baseUrl}}/api/doctor/patients-filter?search=Navod
+Authorization: Bearer {{authToken}}
+
+### Filter Patients - By name
+GET {{baseUrl}}/api/doctor/patients-filter?name=Navod
+Authorization: Bearer {{authToken}}
+
+### Filter Patients - By email
+GET {{baseUrl}}/api/doctor/patients-filter?email=gmail.com
+Authorization: Bearer {{authToken}}
+
+### Filter Patients - By phone
+GET {{baseUrl}}/api/doctor/patients-filter?phone=+94
+Authorization: Bearer {{authToken}}
+
+### Update Patient
+# Replace {patientId} with an actual patient ID
+PUT {{baseUrl}}/api/admin/patients/{patientId}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "firstName": "Navod",
+  "lastName": "Hansajith Updated",
+  "phone": "+94712345679",
+  "address": "123 Main St, Colombo",
+  "medicalHistory": "No significant medical history"
+}
+
+### Delete Patient
+# Replace {patientId} with an actual patient ID
+DELETE {{baseUrl}}/api/admin/patients/{patientId}
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### Diagnosis
+### =============================================
+
+### Cholesteatoma Diagnosis
+# Note: For file uploads, you'll need to use a tool like Postman
+# This is a simplified version for reference
+POST {{baseUrl}}/api/doctor/diagnosis/cholesteatoma
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer {{authToken}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="diagnosticianId"
+
+your_user_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="patientId"
+
+patient_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="additionalInformation"
+
+Patient complains of ear pain and discharge
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="endoscopyImage"; filename="endoscopy-image.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/endoscopy-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Sinusitis Diagnosis
+# Note: For file uploads, you'll need to use a tool like Postman
+# This is a simplified version for reference
+POST {{baseUrl}}/api/doctor/diagnosis/sinusitis
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer {{authToken}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="diagnosticianId"
+
+your_user_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="patientId"
+
+patient_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="additionalInformation"
+
+Patient complains of nasal congestion and facial pain
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="watersViewXrayImage"; filename="waters-view-xray.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/waters-view-xray.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Pharyngitis Diagnosis
+# Note: For file uploads, you'll need to use a tool like Postman
+# This is a simplified version for reference
+POST {{baseUrl}}/api/doctor/diagnosis/pharyngitis
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer {{authToken}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="diagnosticianId"
+
+your_user_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="patientId"
+
+patient_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="additionalInformation"
+
+Patient complains of sore throat and difficulty swallowing
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="throatImage"; filename="throat-image.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/throat-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Get Sinusitis Reports
+GET {{baseUrl}}/api/doctor/diagnosis/sinusitis/reports
+Authorization: Bearer {{authToken}}
+
+### Get All Sinusitis Diagnoses
+GET {{baseUrl}}/api/doctor/diagnosis/sinusitis
+Authorization: Bearer {{authToken}}
+
+### Get Cholesteatoma Reports
+GET {{baseUrl}}/api/doctor/diagnosis/cholesteatoma/reports
+Authorization: Bearer {{authToken}}
+
+### Get All Cholesteatoma Diagnoses
+GET {{baseUrl}}/api/doctor/diagnosis/cholesteatoma
+Authorization: Bearer {{authToken}}
+
+### Get Pharyngitis Reports
+GET {{baseUrl}}/api/doctor/diagnosis/pharyngitis/reports
+Authorization: Bearer {{authToken}}
+
+### Get All Pharyngitis Diagnoses
+GET {{baseUrl}}/api/doctor/diagnosis/pharyngitis
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### Admin
+### =============================================
+
+### Get All Users
+GET {{baseUrl}}/api/admin/users
+Authorization: Bearer {{authToken}}
+
+### Get User by ID
+# Replace {userId} with an actual user ID
+GET {{baseUrl}}/api/admin/users/{userId}
+Authorization: Bearer {{authToken}}
+
+### Update User
+# Replace {userId} with an actual user ID
+PUT {{baseUrl}}/api/admin/users/{userId}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Updated Name",
+  "email": "updated.email@example.com",
+  "role": "doctor"
+}
+
+### Delete User
+# Replace {userId} with an actual user ID
+DELETE {{baseUrl}}/api/admin/users/{userId}
+Authorization: Bearer {{authToken}}
