@@ -64,6 +64,7 @@ app.use('/api/admin', Authentication.verifyToken, verifyRole([Role.ADMIN]));
 app.use('/api/doctor', Authentication.verifyToken, verifyRole([Role.DOCTOR]));
 app.use('/api/radiologist', Authentication.verifyToken, verifyRole([Role.RADIOLOGIST]));
 app.use('/api/student', Authentication.verifyToken, verifyRole([Role.STUDENT]));
+app.use('/api/patient', Authentication.verifyToken, verifyRole([Role.PATIENT]));
 routes.initRoutes(app);
 
 // Error Handling

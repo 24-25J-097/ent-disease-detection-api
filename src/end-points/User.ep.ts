@@ -39,7 +39,7 @@ export function authenticateValidationRules() {
 
 export function registerValidationRules() {
     return [
-        AuthValidations.role([Role.ADMIN, Role.DOCTOR, Role.RADIOLOGIST, Role.STUDENT ]),
+        AuthValidations.role([Role.ADMIN, Role.DOCTOR, Role.RADIOLOGIST, Role.STUDENT, Role.PATIENT ]),
         AuthValidations.email(),
         AuthValidations.name().optional({checkFalsy: true}),
         AuthValidations.password(),
