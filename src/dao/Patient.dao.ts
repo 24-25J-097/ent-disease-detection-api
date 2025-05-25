@@ -4,6 +4,7 @@ import { ApplicationError } from "../utils/application-error";
 import Patient from "../schemas/Patient.schema";
 import { Role } from "../enums/auth";
 import { IUser } from "../models/User.model";
+import mongoose from "mongoose";
 
 export async function createPatient(data: Partial<DPatient>): Promise<IPatient> {
     try {
@@ -22,7 +23,7 @@ export async function createPatient(data: Partial<DPatient>): Promise<IPatient> 
             isActive: true,
             isVerified: true,
         };
-        
+
         const iPatient = new Patient(patientData);
         const savedPatient = await iPatient.save();
         AppLogger.info(`Create Patient (ID: ${savedPatient._id})`);
@@ -45,12 +46,12 @@ export async function updatePatient(patientId: string, data: Partial<DPatient>):
                 AppLogger.error(`Patient (ID: ${patientId}): Not Found`);
                 throw new ApplicationError(`Update patient: Patient not found for ID: ${patientId}!`, 404);
             }
-            
+
             const firstName = data.firstName || patient.firstName;
             const lastName = data.lastName || patient.lastName;
             data.name = `${firstName} ${lastName}`;
         }
-        
+
         const updatedPatient = await Patient.findByIdAndUpdate(patientId, data, { new: true });
         if (updatedPatient) {
             AppLogger.info(`Update Patient (ID: ${updatedPatient._id})`);
@@ -115,6 +116,64 @@ export async function deletePatient(patientId: string): Promise<IPatient> {
         if (error instanceof Error) {
             AppLogger.error(`Deleting patient: ${error.message}`);
             throw new ApplicationError(`Deleting patient: ${error.message}`);
+        }
+        throw error;
+    }
+}
+
+export interface PatientFilterOptions {
+    name?: string;
+    email?: string;
+    phone?: string;
+    search?: string;
+}
+
+export interface PatientFilterResult {
+    value: string;
+    label: string;
+}
+
+export async function filterPatients(ownUser: IUser, options: PatientFilterOptions): Promise<PatientFilterResult[]> {
+    try {
+        const query: any = { role: Role.PATIENT };
+
+        // Apply specific filters if provided
+        if (options.name) {
+            query.name = { $regex: options.name, $options: 'i' };
+        }
+
+        if (options.email) {
+            query.email = { $regex: options.email, $options: 'i' };
+        }
+
+        if (options.phone) {
+            query.phone = { $regex: options.phone, $options: 'i' };
+        }
+
+        // Apply search filter if provided (searches across multiple fields)
+        if (options.search) {
+            query.$or = [
+                { name: { $regex: options.search, $options: 'i' } },
+                { email: { $regex: options.search, $options: 'i' } },
+                { phone: { $regex: options.search, $options: 'i' } }
+            ];
+        }
+
+        const patients = await Patient.find(query);
+
+        AppLogger.info(`Filter patients (count: ${patients.length}) by ${Role.getTitle(ownUser.role)} (ID: ${ownUser._id})`);
+
+        // Transform to the required format
+        return patients.map(patient => ({
+            value: patient._id.toString(),
+            label: patient.phone 
+                ? `${patient.name} - ${patient.phone}` 
+                : `${patient.name} - ${patient.email}`
+        }));
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            AppLogger.error(`Filtering patients: ${error.message}`);
+            throw new ApplicationError(`Filtering patients: ${error.message}`);
         }
         throw error;
     }

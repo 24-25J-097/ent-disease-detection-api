@@ -31,6 +31,7 @@ export function DoctorRoutesInit(app: Express) {
     app.post('/api/doctor/patients', PatientEp.createPatient);
     app.get('/api/doctor/patients', PatientEp.getAllPatients);
     app.get('/api/doctor/patients/:id', PatientEp.getPatient);
+    app.get('/api/doctor/patients-filter', PatientEp.filterPatients);
 
     // CHOLESTEATOMA ROUTES
     app.post('/api/doctor/diagnosis/cholesteatoma', upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);

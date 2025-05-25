@@ -141,3 +141,40 @@ export async function deletePatient(req: Request, res: Response) {
         return res.sendError("Internal server error");
     }
 }
+
+// Validation schema for filtering patients
+const filterPatientsSchema = Joi.object({
+    name: Joi.string().optional(),
+    email: Joi.string().optional(),
+    phone: Joi.string().optional(),
+    search: Joi.string().optional(),
+});
+
+export async function filterPatients(req: Request, res: Response) {
+    try {
+        const ownUser = req.user as IUser;
+
+        // Validate query parameters
+        const { error, value } = filterPatientsSchema.validate(req.query);
+        if (error) {
+            return res.sendError(error.details[0].message, 422);
+        }
+
+        const filterOptions: PatientDao.PatientFilterOptions = {
+            name: value.name,
+            email: value.email,
+            phone: value.phone,
+            search: value.search,
+        };
+
+        const filteredPatients = await PatientDao.filterPatients(ownUser, filterOptions);
+
+        return res.sendSuccess(filteredPatients, "Patients filtered successfully");
+    } catch (error) {
+        if (error instanceof ApplicationError) {
+            return res.sendError(error.message, error.statusCode);
+        }
+        AppLogger.error(`Filter patients error: ${error}`);
+        return res.sendError("Internal server error");
+    }
+}
