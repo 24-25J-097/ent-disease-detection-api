@@ -152,7 +152,7 @@ export async function filterPatients(ownUser: IUser, options: PatientFilterOptio
 
         // Transform to the required format
         return patients.map(patient => ({
-            value: patient._id.toString(),
+            value: patient.patientId ? patient.patientId.toString() : patient._id.toString(),
             label: patient.phone 
                 ? `${patient.name} - ${patient.phone}` 
                 : `${patient.name} - ${patient.email}`
