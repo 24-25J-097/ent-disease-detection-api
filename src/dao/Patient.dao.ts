@@ -9,9 +9,8 @@ import mongoose from "mongoose";
 export async function createPatient(data: Partial<DPatient>): Promise<IPatient> {
     try {
         const patientData: DPatient = {
-            firstName: data.firstName!,
-            lastName: data.lastName!,
-            name: `${data.firstName} ${data.lastName}`,
+            name: data.name!,
+            nic: data.nic!,
             email: data.email!,
             password: data.password!,
             phone: data.phone,
@@ -39,18 +38,6 @@ export async function createPatient(data: Partial<DPatient>): Promise<IPatient> 
 
 export async function updatePatient(patientId: string, data: Partial<DPatient>): Promise<IPatient> {
     try {
-        // If name is being updated, update it based on firstName and lastName
-        if (data.firstName || data.lastName) {
-            const patient = await Patient.findById(patientId);
-            if (!patient) {
-                AppLogger.error(`Patient (ID: ${patientId}): Not Found`);
-                throw new ApplicationError(`Update patient: Patient not found for ID: ${patientId}!`, 404);
-            }
-
-            const firstName = data.firstName || patient.firstName;
-            const lastName = data.lastName || patient.lastName;
-            data.name = `${firstName} ${lastName}`;
-        }
 
         const updatedPatient = await Patient.findByIdAndUpdate(patientId, data, { new: true });
         if (updatedPatient) {

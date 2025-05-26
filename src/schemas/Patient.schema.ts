@@ -11,13 +11,10 @@ export const PatientSchema = new mongoose.Schema({
         required: false,
         unique: true,
     },
-    firstName: {
+    nic: {
         type: Schema.Types.String,
         required: true,
-    },
-    lastName: {
-        type: Schema.Types.String,
-        required: true,
+        unique: true,
     },
     dateOfBirth: {
         type: Schema.Types.String,
