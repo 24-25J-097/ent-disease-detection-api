@@ -19,12 +19,13 @@ const schemaOptions: mongoose.SchemaOptions = {
 export const SinusitisSchema = new mongoose.Schema({
     diagnosticianId: {
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'users',
         required: true
     },
     patientId: {
-        type:  Schema.Types.String,
-        required: true
+        type:  Schema.Types.ObjectId,
+        required: true,
+        ref: 'users'
     },
     additionalInformation: {
         type:  Schema.Types.String,
