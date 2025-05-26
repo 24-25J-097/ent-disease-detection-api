@@ -23,7 +23,7 @@ export async function sinusitisDiagnosis(req: Request, res: Response, next: Next
 
     const data: Partial<DSinusitis> = {
         diagnosticianId: req.user?._id ?? "6748dfecb90a2d54067a224a", // TODO: for public
-        patientId: patientId as string,
+        patientId: patientId,
         additionalInformation: additionalInfo
     }
 

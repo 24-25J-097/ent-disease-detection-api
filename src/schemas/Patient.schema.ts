@@ -52,6 +52,6 @@ PatientSchema.pre('save', async function (next) {
     next();
 });
 
-const Patient = User.discriminator<IPatient>(Role.PATIENT, PatientSchema);
+const Patient = User.discriminator<IPatient>('patients', PatientSchema, Role.PATIENT);
 
 export default Patient;
