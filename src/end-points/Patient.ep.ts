@@ -157,16 +157,17 @@ export async function filterPatients(req: Request, res: Response) {
         const ownUser = req.user as IUser;
 
         // Validate query parameters
-        const { error, value } = filterPatientsSchema.validate(req.query);
+        const {error, value} = filterPatientsSchema.validate(req.query);
         if (error) {
             return res.sendError(error.details[0].message, 422);
         }
 
         const filterOptions: PatientDao.PatientFilterOptions = {
-            name: value.name,
-            email: value.email,
-            phone: value.phone,
-            search: value.search,
+            patientId: value.filter.patientId,
+            name: value.filter.name,
+            email: value.filter.email,
+            phone: value.filter.phone,
+            search: value.filter.search,
         };
 
         const filteredPatients = await PatientDao.filterPatients(ownUser, filterOptions);

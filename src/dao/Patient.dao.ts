@@ -1,10 +1,9 @@
-import { AppLogger } from "../utils/logging";
-import { DPatient, IPatient } from "../models/Patient.model";
-import { ApplicationError } from "../utils/application-error";
+import {AppLogger} from "../utils/logging";
+import {DPatient, IPatient} from "../models/Patient.model";
+import {ApplicationError} from "../utils/application-error";
 import Patient from "../schemas/Patient.schema";
-import { Role } from "../enums/auth";
-import { IUser } from "../models/User.model";
-import mongoose from "mongoose";
+import {Role} from "../enums/auth";
+import {IUser} from "../models/User.model";
 
 export async function createPatient(data: Partial<DPatient>): Promise<IPatient> {
     try {
@@ -39,7 +38,7 @@ export async function createPatient(data: Partial<DPatient>): Promise<IPatient> 
 export async function updatePatient(patientId: string, data: Partial<DPatient>): Promise<IPatient> {
     try {
 
-        const updatedPatient = await Patient.findByIdAndUpdate(patientId, data, { new: true });
+        const updatedPatient = await Patient.findByIdAndUpdate(patientId, data, {new: true});
         if (updatedPatient) {
             AppLogger.info(`Update Patient (ID: ${updatedPatient._id})`);
             return updatedPatient;
@@ -109,6 +108,7 @@ export async function deletePatient(patientId: string): Promise<IPatient> {
 }
 
 export interface PatientFilterOptions {
+    patientId?: string;
     name?: string;
     email?: string;
     phone?: string;
@@ -122,27 +122,29 @@ export interface PatientFilterResult {
 
 export async function filterPatients(ownUser: IUser, options: PatientFilterOptions): Promise<PatientFilterResult[]> {
     try {
-        const query: any = { role: Role.PATIENT };
+        const query: any = {role: Role.PATIENT};
 
         // Apply specific filters if provided
+        if (options.patientId) {
+            query.patientId = {$regex: options.patientId, $options: 'i'};
+        }
         if (options.name) {
-            query.name = { $regex: options.name, $options: 'i' };
+            query.name = {$regex: options.name, $options: 'i'};
         }
-
         if (options.email) {
-            query.email = { $regex: options.email, $options: 'i' };
+            query.email = {$regex: options.email, $options: 'i'};
         }
-
         if (options.phone) {
-            query.phone = { $regex: options.phone, $options: 'i' };
+            query.phone = {$regex: options.phone, $options: 'i'};
         }
 
         // Apply search filter if provided (searches across multiple fields)
         if (options.search) {
             query.$or = [
-                { name: { $regex: options.search, $options: 'i' } },
-                { email: { $regex: options.search, $options: 'i' } },
-                { phone: { $regex: options.search, $options: 'i' } }
+                {patientId: {$regex: options.search, $options: 'i'}},
+                {name: {$regex: options.search, $options: 'i'}},
+                {email: {$regex: options.search, $options: 'i'}},
+                {phone: {$regex: options.search, $options: 'i'}}
             ];
         }
 
@@ -153,8 +155,8 @@ export async function filterPatients(ownUser: IUser, options: PatientFilterOptio
         // Transform to the required format
         return patients.map(patient => ({
             value: patient.patientId ? patient.patientId.toString() : patient._id.toString(),
-            label: patient.phone 
-                ? `${patient.name} - ${patient.phone}` 
+            label: patient.phone
+                ? `${patient.name} - ${patient.phone}`
                 : `${patient.name} - ${patient.email}`
         }));
     } catch (error: unknown) {
