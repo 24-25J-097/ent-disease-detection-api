@@ -34,6 +34,10 @@ export async function authenticateUser(email: string, password: string, signedUp
             if (!allowStudent && user.role === Role.STUDENT) {
                 AppLogger.error(`Student login attempt blocked for: ${email}. `);
                 throw new ApplicationError('Student logins are not allowed through this form.', 403);
+            } 
+            if (allowStudent && user.role !== Role.STUDENT) {
+                AppLogger.error(`Non-student login attempt blocked for: ${email}. `);
+                throw new ApplicationError('Only student logins are allowed through this form.', 403);
             }
             const isMatch = await user.comparePassword(password);
             if (!isMatch) {
