@@ -14,6 +14,9 @@ export function AuthRoutesInit(app: Express) {
     // app.get('/api/public/token-validate/:token', UserEp.tokenValidationRules(), UserEp.tokenValidate);
     // app.get('/api/public/logout', UserEp.logout);
 
+    app.post('/api/public/student/login', UserEp.authenticateValidationRules(), UserEp.loginStudent);
+    app.post('/api/public/student/register', UserEp.studentRegisterValidationRules(), UserEp.registerUser);
+
     /* AUTH ROUTES ===================================== */
     app.get('/api/auth/me', UserEp.getSelf);
     app.put('/api/auth/me', UserEp.updateUserValidationRules(true), UserEp.updateSelf);

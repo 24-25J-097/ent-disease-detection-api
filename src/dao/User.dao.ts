@@ -27,10 +27,14 @@ function getPopulatesForRole(role: Role): PopulateOptions[] {
     }
 }
 
-export async function authenticateUser(email: string, password: string, signedUpAs: string | undefined, tokenValidityTime: string): Promise<AuthUserData> {
+export async function authenticateUser(email: string, password: string, signedUpAs: string | undefined, tokenValidityTime: string, allowStudent = false): Promise<AuthUserData> {
     if (signedUpAs === SignedUpAs.EMAIL) {
         const user = await User.findOne({email: email});
         if (user) {
+            if (!allowStudent && user.role === Role.STUDENT) {
+                AppLogger.error(`Student login attempt blocked for: ${email}. `);
+                throw new ApplicationError('Student logins are not allowed through this form.', 403);
+            }
             const isMatch = await user.comparePassword(password);
             if (!isMatch) {
                 AppLogger.error(`User logging failed, Incorrect credentials: ${email}`);
@@ -158,4 +162,3 @@ export async function deactivate(userId: Types.ObjectId, ownUser: IUser): Promis
     AppLogger.error(`Deactivate user: User not found (ID: ${userId})`);
     throw new ApplicationError(`Deactivate user: User not found for ID: ${userId} !`, 404);
 }
-
