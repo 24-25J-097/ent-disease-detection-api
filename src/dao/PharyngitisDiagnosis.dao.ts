@@ -27,6 +27,7 @@ export async function createPharyngitisDiagnosis(data: Partial<DPharyngitis>, en
             diagnosticianId: data.diagnosticianId,
             patientId: data.patientId ?? "defaultId",
             additionalInformation: data.additionalInformation,
+            isLearningPurpose: data.isLearningPurpose ?? false,
             throatImage: savedFile._id,
         };
         const iDiagnosis = new Pharyngitis(pharyngitisData);

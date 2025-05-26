@@ -30,6 +30,7 @@ export async function createCholesteatomaDiagnosis(data: Partial<DCholesteatoma>
             patientId: data.patientId ?? "defaultId",
             additionalInformation: data.additionalInformation,
             endoscopyImage: savedFile._id,
+            isLearningPurpose: data.isLearningPurpose ?? false,
         };
         const iDiagnosis = new Cholesteatoma(cholesteatomaData);
         const savedDiagnosis = await iDiagnosis.save();

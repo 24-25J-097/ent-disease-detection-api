@@ -38,6 +38,7 @@ export async function createSinusitisDiagnosis(data: Partial<DSinusitis>, waters
             diagnosticianId: data.diagnosticianId,
             patientId: patientObjectId,
             additionalInformation: data.additionalInformation,
+            isLearningPurpose: data.isLearningPurpose ?? false,
             watersViewXrayImage: savedFile._id,
         };
         const iDiagnosis = new Sinusitis(sinusitisData);
