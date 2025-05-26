@@ -25,7 +25,7 @@ export function AdminRoutesInit(app: Express) {
     // Plans
     app.get("/api/admin/packages", PackageEp.getAllPackages);
     app.post("/api/admin/packages", PackageEp.createPackage);
-    app.patch("/api/admin/packages/:id/status", PackageEp.setPackageStatus);
+    app.post("/api/admin/packages/:id/status", PackageEp.setPackageStatus);
     app.get("/api/admin/packages/:id", PackageEp.getPackageById);
     app.put("/api/admin/packages/:id", PackageEp.updatePackage);
     app.delete("/api/admin/packages/:id", PackageEp.deletePackage);
