@@ -1,4 +1,4 @@
-import { DUser, IUser } from "./User.model";
+import {DUser, IUser} from "./User.model";
 
 interface CommonAttributes {
     patientId?: string;

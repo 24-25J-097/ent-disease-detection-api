@@ -1,9 +1,9 @@
 import * as mongoose from "mongoose";
-import { Schema } from "mongoose";
-import { IPatient } from "../models/Patient.model";
-import { Role } from "../enums/auth";
-import User, { UserSchemaOptions } from "./User.schema";
-import { Counter } from "./Counter.schema";
+import {Schema} from "mongoose";
+import {IPatient} from "../models/Patient.model";
+import {Role} from "../enums/auth";
+import User, {UserSchemaOptions} from "./User.schema";
+import {Counter} from "./Counter.schema";
 
 export const PatientSchema = new mongoose.Schema({
     patientId: {
@@ -51,7 +51,7 @@ PatientSchema.pre('save', async function (next) {
         const paddedSeq = String(counter.seq).padStart(4, '0'); // e.g., 0001
         doc.patientId = `PT${paddedSeq}`;
     }
-    console.log("Generated patientId: ", doc.patientId, doc.isNew);
+
     next();
 });
 
