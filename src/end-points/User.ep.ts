@@ -112,7 +112,7 @@ export async function loginStudent(req: Request, res: Response, next: NextFuncti
 
 export async function registerUser(req: Request, res: Response, next: NextFunction) {
     if (validationsChecker(req, res)) {
-        const { role, email, adminToken = null } = req.body;
+        const { role, email, superAdminToken = null } = req.body;
         const user = await UserDao.getUserByEmail(email);
         AppLogger.info(`New user tried to register as ${role} by ${email}`);
 
@@ -142,7 +142,7 @@ export async function registerUser(req: Request, res: Response, next: NextFuncti
                     res.sendError(e);
                 }
             } else if (role === Role.ADMIN) {
-                if (adminToken) {
+                if (superAdminToken) {
                     try {
                         await AdminEp.register(req, res, next);
                     } catch (e) {

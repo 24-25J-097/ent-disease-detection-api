@@ -1,9 +1,9 @@
-import { DUser, IUser } from "./User.model";
+import {DUser, IUser} from "./User.model";
 
 interface CommonAttributes {
     patientId?: string;
-    firstName: string;
-    lastName: string;
+    name: string;
+    nic: string;
     dateOfBirth: string;
     gender: string;
     address?: string;
@@ -16,8 +16,8 @@ export interface DPatient extends CommonAttributes, DUser {
 
 export interface IPatient extends CommonAttributes, IUser {
     readonly patientId: string;
-    readonly firstName: string;
-    readonly lastName: string;
+    readonly name: string;
+    readonly nic: string;
     readonly dateOfBirth: string;
     readonly gender: string;
     readonly address?: string;

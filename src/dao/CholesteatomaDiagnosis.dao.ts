@@ -30,6 +30,7 @@ export async function createCholesteatomaDiagnosis(data: Partial<DCholesteatoma>
             patientId: data.patientId ?? "defaultId",
             additionalInformation: data.additionalInformation,
             endoscopyImage: savedFile._id,
+            isLearningPurpose: data.isLearningPurpose ?? false,
         };
         const iDiagnosis = new Cholesteatoma(cholesteatomaData);
         const savedDiagnosis = await iDiagnosis.save();
@@ -57,7 +58,7 @@ export async function updateCholesteatomaDiagnosis(diagnosisId: string, data: Pa
 }
 
 export async function getCholesteatomaReports(ownUser: IUser) {
-    const cholesteatomaData = await Cholesteatoma.find();
+    const cholesteatomaData = await Cholesteatoma.find({ isLearningPurpose: false });
 
     if (!cholesteatomaData || cholesteatomaData.length === 0) {
         AppLogger.error("Cholesteatoma Data: Not Found");
@@ -224,7 +225,7 @@ export async function getCholesteatomaReports(ownUser: IUser) {
 }
 
 export async function getCholesteatomaData(ownUser: IUser) {
-    const cholesteatomaData = await Cholesteatoma.find();
+    const cholesteatomaData = await Cholesteatoma.find({ isLearningPurpose: false });
     if (cholesteatomaData) {
         AppLogger.info(`Got cholesteatoma list - Count: ${cholesteatomaData.length} by ${Role.getTitle(ownUser.role)} (ID: ${ownUser._id})`);
         return cholesteatomaData;

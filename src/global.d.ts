@@ -14,7 +14,7 @@ declare global {
         }
 
         export interface Response {
-            sendSuccess: (data: unknown, message?: string) => void;
+            sendSuccess: (data: unknown, message?: string, code?: number) => void;
             sendError: (error: unknown, errorCode?: number) => void;
         }
 

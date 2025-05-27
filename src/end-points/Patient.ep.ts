@@ -8,8 +8,8 @@ import Joi from "joi";
 
 // Validation schema for creating a patient
 const createPatientSchema = Joi.object({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
+    name: Joi.string().required(),
+    nic: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
     phone: Joi.string().optional(),
@@ -21,8 +21,8 @@ const createPatientSchema = Joi.object({
 
 // Validation schema for updating a patient
 const updatePatientSchema = Joi.object({
-    firstName: Joi.string().optional(),
-    lastName: Joi.string().optional(),
+    name: Joi.string().optional(),
+    nic: Joi.string().optional(),
     email: Joi.string().email().optional(),
     phone: Joi.string().optional(),
     dateOfBirth: Joi.string().optional(),
@@ -35,8 +35,8 @@ export async function createPatient(req: Request, res: Response) {
     try {
         // Validate request body
         const requestBody = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+            name: req.body.name,
+            nic: req.body.nic,
             email: req.body.email,
             password: req.body.password || '123456@aA',
             phone: req.body.phone,
@@ -69,8 +69,8 @@ export async function updatePatient(req: Request, res: Response) {
     try {
         const patientId = req.params.id;
         const requestBody = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+            name: req.body.name,
+            nic: req.body.nic,
             email: req.body.email,
             phone: req.body.phone,
             dateOfBirth: req.body.dateOfBirth,
@@ -157,16 +157,17 @@ export async function filterPatients(req: Request, res: Response) {
         const ownUser = req.user as IUser;
 
         // Validate query parameters
-        const { error, value } = filterPatientsSchema.validate(req.query);
+        const {error, value} = filterPatientsSchema.validate(req.query);
         if (error) {
             return res.sendError(error.details[0].message, 422);
         }
 
         const filterOptions: PatientDao.PatientFilterOptions = {
-            name: value.name,
-            email: value.email,
-            phone: value.phone,
-            search: value.search,
+            patientId: value.filter.patientId,
+            name: value.filter.name,
+            email: value.filter.email,
+            phone: value.filter.phone,
+            search: value.filter.search,
         };
 
         const filteredPatients = await PatientDao.filterPatients(ownUser, filterOptions);

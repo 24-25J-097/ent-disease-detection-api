@@ -5,6 +5,7 @@ interface CommonAttributes {
     diagnosticianId?: StringOrObjectId;
     patientId: StringOrObjectId;
     additionalInformation?: string;
+    isLearningPurpose: boolean;
     watersViewXrayImage: mongoose.Schema.Types.ObjectId;
     diagnosisResult?: {
         isSinusitis?: boolean;

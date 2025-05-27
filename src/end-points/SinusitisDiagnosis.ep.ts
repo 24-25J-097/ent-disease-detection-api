@@ -12,7 +12,7 @@ const FormData = require("form-data");
 
 export async function sinusitisDiagnosis(req: Request, res: Response, next: NextFunction) {
 
-    const {patientId, additionalInfo} = req.body;
+    const {patientId, additionalInfo, isLearningPurpose} = req.body;
     const watersViewXrayImageFile = req.file;
 
     if (!patientId || !watersViewXrayImageFile) {
@@ -24,7 +24,8 @@ export async function sinusitisDiagnosis(req: Request, res: Response, next: Next
     const data: Partial<DSinusitis> = {
         diagnosticianId: req.user?._id ?? "6748dfecb90a2d54067a224a", // TODO: for public
         patientId: patientId,
-        additionalInformation: additionalInfo
+        additionalInformation: additionalInfo,
+        isLearningPurpose: isLearningPurpose
     }
 
     try {
@@ -139,4 +140,3 @@ export async function sinusitisImage(req: Request, res: Response, next: NextFunc
         res.sendFile(imagePath!);
     }).catch(next);
 }
-

@@ -12,7 +12,7 @@ const FormData = require("form-data");
 
 export async function pharyngitisDiagnosis(req: Request, res: Response, next: NextFunction) {
 
-    const {patientId, additionalInfo} = req.body;
+    const {patientId, additionalInfo, isLearningPurpose} = req.body;
     const endoscopyImageFile = req.file;
 
     if (!patientId || !endoscopyImageFile) {
@@ -24,7 +24,8 @@ export async function pharyngitisDiagnosis(req: Request, res: Response, next: Ne
     const data: Partial<DPharyngitis> = {
         diagnosticianId: req.user?._id ?? "6748dfecb90a2d54067a224a", // TODO: for public
         patientId: patientId as string,
-        additionalInformation: additionalInfo
+        additionalInformation: additionalInfo,
+        isLearningPurpose: isLearningPurpose
     }
 
     try {

@@ -1,9 +1,9 @@
 import * as mongoose from "mongoose";
-import { Schema } from "mongoose";
-import { IPatient } from "../models/Patient.model";
-import { Role } from "../enums/auth";
-import User, { UserSchemaOptions } from "./User.schema";
-import { Counter } from "./Counter.schema";
+import {Schema} from "mongoose";
+import {IPatient} from "../models/Patient.model";
+import {Role} from "../enums/auth";
+import User, {UserSchemaOptions} from "./User.schema";
+import {Counter} from "./Counter.schema";
 
 export const PatientSchema = new mongoose.Schema({
     patientId: {
@@ -11,13 +11,10 @@ export const PatientSchema = new mongoose.Schema({
         required: false,
         unique: true,
     },
-    firstName: {
+    nic: {
         type: Schema.Types.String,
         required: true,
-    },
-    lastName: {
-        type: Schema.Types.String,
-        required: true,
+        unique: true,
     },
     dateOfBirth: {
         type: Schema.Types.String,
@@ -51,10 +48,10 @@ PatientSchema.pre('save', async function (next) {
         const paddedSeq = String(counter.seq).padStart(4, '0'); // e.g., 0001
         doc.patientId = `PT${paddedSeq}`;
     }
-    console.log("Generated patientId: ", doc.patientId, doc.isNew);
+
     next();
 });
 
-export const Patient = User.discriminator<IPatient>('patients', PatientSchema, Role.PATIENT);
+const Patient = User.discriminator<IPatient>('patients', PatientSchema, Role.PATIENT);
 
 export default Patient;
