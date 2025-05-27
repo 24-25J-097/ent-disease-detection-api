@@ -39,7 +39,7 @@ export function authenticateValidationRules() {
 
 export function registerValidationRules() {
     return [
-        AuthValidations.role([Role.ADMIN, Role.DOCTOR, Role.RADIOLOGIST, Role.STUDENT ]),
+        AuthValidations.role([Role.ADMIN, Role.DOCTOR, Role.RADIOLOGIST, Role.PATIENT ]),
         AuthValidations.email(),
         AuthValidations.name().optional({checkFalsy: true}),
         AuthValidations.password(),
@@ -49,6 +49,23 @@ export function registerValidationRules() {
         AuthValidations.nic().if(AuthValidations.role([Role.ADMIN])).optional(),
         // AuthValidations.adminId().if(AuthValidations.role([Role.ADMIN])).optional(),
         AuthValidations.adminToken().if(AuthValidations.role([Role.ADMIN])).optional(),
+    ];
+}
+
+export function studentRegisterValidationRules() {
+    return [
+        AuthValidations.role([Role.STUDENT]),
+        AuthValidations.email(),
+        AuthValidations.name(),
+        AuthValidations.password(),
+        AuthValidations.confirmPassword(),
+        AuthValidations.dateOfBirth(),
+        AuthValidations.country(),
+        AuthValidations.institution(),
+        AuthValidations.studyYear(),
+        AuthValidations.specialization(),
+        AuthValidations.agreeToTerms(),
+        AuthValidations.agreeToNewsletter(),
     ];
 }
 
@@ -81,9 +98,21 @@ export async function loginUser(req: Request, res: Response, next: NextFunction)
     }
 }
 
+export async function loginStudent(req: Request, res: Response, next: NextFunction) {
+    const { email, password, signedUpAs, remember } = req.body;
+
+    if (validationsChecker(req, res)) {
+        UserDao.authenticateUser(email, password, signedUpAs, authTokenValidity(remember), true)
+            .then(async (data: AuthUserData) => {
+                res.sendSuccess(data, `User logged as ${Role.getTitle(data.user.role)}!`);
+            })
+            .catch(next);
+    }
+}
+
 export async function registerUser(req: Request, res: Response, next: NextFunction) {
     if (validationsChecker(req, res)) {
-        const { role, email, adminToken = null } = req.body;
+        const { role, email, superAdminToken = null } = req.body;
         const user = await UserDao.getUserByEmail(email);
         AppLogger.info(`New user tried to register as ${role} by ${email}`);
 
@@ -113,7 +142,7 @@ export async function registerUser(req: Request, res: Response, next: NextFuncti
                     res.sendError(e);
                 }
             } else if (role === Role.ADMIN) {
-                if (adminToken) {
+                if (superAdminToken) {
                     try {
                         await AdminEp.register(req, res, next);
                     } catch (e) {

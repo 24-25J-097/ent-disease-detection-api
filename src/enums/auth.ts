@@ -3,6 +3,7 @@ export enum Role {
     DOCTOR = "doctor",
     RADIOLOGIST = "radiologist",
     STUDENT = "student",
+    PATIENT = "patient",
 }
 
 export namespace Role {
@@ -16,6 +17,8 @@ export namespace Role {
             case Role.RADIOLOGIST:
                 return [];
             case Role.STUDENT:
+                return [];
+            case Role.PATIENT:
                 return [];
             default:
                 return [];
@@ -32,6 +35,8 @@ export namespace Role {
                 return "Radiologist";
             case Role.STUDENT:
                 return "Student";
+            case Role.PATIENT:
+                return "Patient";
             default:
                 return "Invalid-Role";
         }

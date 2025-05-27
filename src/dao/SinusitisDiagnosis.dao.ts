@@ -6,6 +6,8 @@ import {ApplicationError} from "../utils/application-error";
 import {DUpload} from "../models/Upload.model";
 import {IUser} from "../global";
 import {Role} from "../enums/auth";
+import mongoose from "mongoose";
+import {IPatient} from "../models/Patient.model";
 
 export async function createSinusitisDiagnosis(data: Partial<DSinusitis>, watersViewXrayImageFile: Express.Multer.File): Promise<ISinusitis> {
     try {
@@ -23,10 +25,20 @@ export async function createSinusitisDiagnosis(data: Partial<DSinusitis>, waters
         const savedFile = await iUpload.save();
         AppLogger.info(`Save file in uploads (ID: ${savedFile._id}) by (ID: ${data.diagnosticianId})`);
 
+        // Convert patientId to ObjectId if it's a valid MongoDB ObjectId
+        let patientObjectId;
+        if (data.patientId && mongoose.Types.ObjectId.isValid(data.patientId)) {
+            patientObjectId = new mongoose.Types.ObjectId(data.patientId);
+        } else {
+            AppLogger.warn(`Invalid MongoDB ObjectId for patientId: ${data.patientId}. Using default.`);
+            patientObjectId = new mongoose.Types.ObjectId("000000000000000000000000"); // Default ObjectId
+        }
+
         const sinusitisData: DSinusitis = {
             diagnosticianId: data.diagnosticianId,
-            patientId: data.patientId ?? "defaultId",
+            patientId: patientObjectId,
             additionalInformation: data.additionalInformation,
+            isLearningPurpose: data.isLearningPurpose ?? false,
             watersViewXrayImage: savedFile._id,
         };
         const iDiagnosis = new Sinusitis(sinusitisData);
@@ -195,7 +207,7 @@ export async function getSinusitisReports(ownUser: IUser) {
         }
     ];
 
-     const monthlySeverityTrends: { month: string; mild: number; moderate: number; severe: number }[] = [];
+    const monthlySeverityTrends: { month: string; mild: number; moderate: number; severe: number }[] = [];
 
     // Group data by month and severity
     for (let month = 0; month < 12; month++) {
@@ -205,7 +217,7 @@ export async function getSinusitisReports(ownUser: IUser) {
         });
 
         monthlySeverityTrends.push({
-            month: new Date(2024, month, 1).toLocaleString("default", { month: "short" }),
+            month: new Date(2024, month, 1).toLocaleString("default", {month: "short"}),
             mild: monthData.filter(c => c.diagnosisResult?.severity?.includes("Mild")).length,
             moderate: monthData.filter(c => c.diagnosisResult?.severity?.includes("Moderate")).length,
             severe: monthData.filter(c => c.diagnosisResult?.severity?.includes("Severe")).length,
@@ -225,13 +237,60 @@ export async function getSinusitisReports(ownUser: IUser) {
 
 
 export async function getSinusitisData(ownUser: IUser) {
-    const sinusitis = await Sinusitis.find();
-    if (sinusitis) {
+    try {
+        // Find all sinusitis records
+        const sinusitis = await Sinusitis.find();
+
+        if (!sinusitis || sinusitis.length === 0) {
+            AppLogger.error(`Get a sinusitis list: Not Found`);
+            throw new ApplicationError(`Get a sinusitis list: Sinusitis not found!`, 404);
+        }
+
+        // Populate patient data for valid MongoDB ObjectIds
+        const populatedSinusitis = await Promise.all(
+            sinusitis.map(async (record) => {
+                try {
+                    // Check if patientId is a valid MongoDB ObjectId
+                    if (mongoose.Types.ObjectId.isValid(record.patientId)) {
+                        // If valid, populate the patient data
+                        // return await Sinusitis.findById(record._id).populate('patientId');
+                        const patientPopulated = await Sinusitis.findById(record._id)
+                            .populate('patientId')
+                            .lean();
+
+                        if (patientPopulated && patientPopulated.patientId) {
+                            const patient = patientPopulated.patientId as unknown as IPatient;
+
+                            // Add `patient` field for easier access
+                            (patientPopulated as any).patient = patient;
+
+                            // Replace `sinusitis.patientId` (_id) with patient's custom `patientId`
+                            (patientPopulated as any).patientId = patient.patientId ?? record.patientId ?? patient._id;
+                        }
+
+                        return patientPopulated;
+
+
+                    } else {
+                        // If not valid, return the record as is
+                        return record;
+                    }
+                } catch (error: any) {
+                    // If there's an error populating, return the record as is
+                    AppLogger.error(`Error populating patient data for record ${record._id}: ${error.message}`);
+                    return record;
+                }
+            })
+        );
+
         AppLogger.info(`Got sinusitis list - Count: ${sinusitis.length} by ${Role.getTitle(ownUser.role)} (ID: ${ownUser._id})`);
-        return sinusitis;
-    } else {
-        AppLogger.error(`Get a sinusitis list: Not Found`);
-        throw new ApplicationError(`Get a sinusitis list: Sinusitis not found!`, 404);
+        return populatedSinusitis;
+    } catch (error: any) {
+        if (error instanceof ApplicationError) {
+            throw error;
+        }
+        AppLogger.error(`Getting sinusitis data: ${error.message}`);
+        throw new ApplicationError(`Getting sinusitis data: ${error.message}`);
     }
 }
 

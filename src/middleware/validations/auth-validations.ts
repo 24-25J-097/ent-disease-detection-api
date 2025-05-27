@@ -43,8 +43,54 @@ export const AuthValidations = {
         .withMessage('Unauthorized user role!'),
     name: () => check('name')
         .isString()
+        .not()
+        .isEmpty()
+        .withMessage('Name is required!')
         .isLength({max: 1000})
         .withMessage('Name field should not be more than 1000 characters long!'),
+    dateOfBirth: () => check('dateOfBirth')
+        .isString()
+        .not()
+        .isEmpty()
+        .withMessage('Date of birth is required!')
+        .isISO8601()
+        .withMessage('Date of birth must be a valid date in ISO8601 format (YYYY-MM-DD)!'),
+    country: () => check('country')
+        .isString()
+        .not()
+        .isEmpty()
+        .withMessage('Country is required!')
+        .isLength({max: 100})
+        .withMessage('Country field should not be more than 100 characters long!'),
+    institution: () => check('institution')
+        .isString()
+        .not()
+        .isEmpty()
+        .withMessage('Institution is required!')
+        .isLength({max: 200})
+        .withMessage('Institution field should not be more than 200 characters long!'),
+    studyYear: () => check('studyYear')
+        .isString()
+        .not()
+        .isEmpty()
+        .withMessage('Study year is required!')
+        .isLength({max: 50})
+        .withMessage('Study year field should not be more than 50 characters long!'),
+    specialization: () => check('specialization')
+        .isString()
+        .not()
+        .isEmpty()
+        .withMessage('Specialization is required!')
+        .isLength({max: 100})
+        .withMessage('Specialization field should not be more than 100 characters long!'),
+    agreeToTerms: () => check('agreeToTerms')
+        .isBoolean()
+        .custom((value) => {
+            if (!value) throw new Error('You must agree to the terms and conditions!');
+            return true;
+        }),
+    agreeToNewsletter: () => check('agreeToNewsletter')
+        .isBoolean(),
     studentId: () => check('studentId')
         .isString()
         .isLength({max: 10})
@@ -92,4 +138,3 @@ export const AuthValidations = {
         .custom((v) => mongoose.isValidObjectId(v))
         .withMessage(`${key} objects are invalid`),
 };
-

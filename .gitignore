@@ -147,3 +147,4 @@ dist
 
 uploads/*
 /src/uploads/
+/http-client.env.json

@@ -1,8 +1,11 @@
-import { Express, Request, Response } from "express";
-import { AdminRoutesInit } from "./admin";
-import { AuthRoutesInit } from "./auth";
+import {Express, Request, Response} from "express";
+import {AdminRoutesInit} from "./admin";
+import {AuthRoutesInit} from "./auth";
 import createHttpError from "http-errors";
 import {DoctorRoutesInit} from "./doctor";
+import {PatientRoutesInit} from "./patient";
+import {StudentRoutesInit} from "./student";
+
 
 export function initRoutes(app: Express) {
     /* TOP LEVEL REQUESTS */
@@ -11,6 +14,8 @@ export function initRoutes(app: Express) {
     AuthRoutesInit(app);
     AdminRoutesInit(app);
     DoctorRoutesInit(app);
+    StudentRoutesInit(app);
+    PatientRoutesInit(app);
 
     /* INVALID REQUESTS */
     app.get('/', (req: Request, res: Response) => res.redirect(301, "/api"));

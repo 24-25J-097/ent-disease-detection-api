@@ -3,6 +3,7 @@ import * as DiagnosisEp from "../end-points/CholesteatomaDiagnosis.ep";
 import * as SinusitisDiagnosisEp from "../end-points/SinusitisDiagnosis.ep";
 import {upload} from "../middleware/upload";
 import * as PharyngitisDiagnosisEp from "../end-points/PharyngitisDiagnosis.ep";
+import * as PatientEp from "../end-points/Patient.ep";
 
 export function DoctorRoutesInit(app: Express) {
 
@@ -25,6 +26,12 @@ export function DoctorRoutesInit(app: Express) {
 
 
     /* AUTH ROUTES ===================================== */
+
+    /* PATIENT ROUTES ===================================== */
+    app.post('/api/doctor/patients', PatientEp.createPatient);
+    app.get('/api/doctor/patients', PatientEp.getAllPatients);
+    app.get('/api/doctor/patients/:id', PatientEp.getPatient);
+    app.get('/api/doctor/patients-filter', PatientEp.filterPatients);
 
     // CHOLESTEATOMA ROUTES
     app.post('/api/doctor/diagnosis/cholesteatoma', upload.single("endoscopyImage"), DiagnosisEp.cholesteatomaDiagnosis);

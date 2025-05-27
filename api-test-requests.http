@@ -1,0 +1,477 @@
+### ENT Disease Detection API Test Requests
+# This file contains HTTP requests for testing the ENT Disease Detection API
+# It can be used with REST Client extension in VS Code or similar tools in JetBrains IDEs
+
+@baseUrl = http://localhost:5000
+@authToken = {{authToken}}
+
+### =============================================
+### Authentication
+### =============================================
+
+### Login
+POST {{baseUrl}}/api/public/login
+Content-Type: application/json
+
+{
+  "email": "doctor@example.com",
+  "password": "password123"
+}
+
+### Register
+POST {{baseUrl}}/api/public/register
+Content-Type: application/json
+
+{
+  "name": "Super Admin",
+  "email": "admin@entinsight.com",
+  "password": "123456@aA",
+  "confirmPassword": "123456@aA",
+  "role": "admin",
+  "superAdminToken": "{{ ADMIN_TOKEN }}"
+}
+
+### Get Current User
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer {{authToken}}
+
+### Update Current User
+PUT {{baseUrl}}/api/auth/me
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "John Doe Updated",
+  "phone": "+94712345678"
+}
+
+### =============================================
+### Patient Management
+### =============================================
+
+### Create Patient
+POST {{baseUrl}}/api/doctor/patients
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "firstName": "Navod",
+  "lastName": "Hansajith",
+  "email": "hansajith18@gmail.com",
+  "password": "123456@aA",
+  "phone": "+94712345678",
+  "address": "",
+  "dateOfBirth": "1993-02-16",
+  "gender": "male"
+}
+
+### Get All Patients
+GET {{baseUrl}}/api/doctor/patients
+Authorization: Bearer {{authToken}}
+
+### Get Patient by ID
+# Replace {patientId} with an actual patient ID
+GET {{baseUrl}}/api/doctor/patients/{patientId}
+Authorization: Bearer {{authToken}}
+
+### Filter Patients - Search across all fields
+GET {{baseUrl}}/api/doctor/patients-filter?filter[search]=Navod
+Authorization: Bearer {{authToken}}
+
+### Filter Patients - By name
+GET {{baseUrl}}/api/doctor/patients-filter?filter[name]=Navod
+Authorization: Bearer {{authToken}}
+
+### Filter Patients - By email
+GET {{baseUrl}}/api/doctor/patients-filter?filter[email]=gmail.com
+Authorization: Bearer {{authToken}}
+
+### Filter Patients - By phone
+GET {{baseUrl}}/api/doctor/patients-filter?filter[phone]=+94
+Authorization: Bearer {{authToken}}
+
+### Update Patient
+# Replace {patientId} with an actual patient ID
+PUT {{baseUrl}}/api/admin/patients/{patientId}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "firstName": "Navod",
+  "lastName": "Hansajith Updated",
+  "phone": "+94712345679",
+  "address": "123 Main St, Colombo",
+  "medicalHistory": "No significant medical history"
+}
+
+### Delete Patient
+# Replace {patientId} with an actual patient ID
+DELETE {{baseUrl}}/api/admin/patients/{patientId}
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### Diagnosis
+### =============================================
+
+### Cholesteatoma Diagnosis
+# Note: For file uploads, you'll need to use a tool like Postman
+# This is a simplified version for reference
+POST {{baseUrl}}/api/doctor/diagnosis/cholesteatoma
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer {{authToken}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="diagnosticianId"
+
+your_user_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="patientId"
+
+patient_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="additionalInformation"
+
+Patient complains of ear pain and discharge
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="endoscopyImage"; filename="endoscopy-image.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/endoscopy-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Sinusitis Diagnosis
+# Note: For file uploads, you'll need to use a tool like Postman
+# This is a simplified version for reference
+POST {{baseUrl}}/api/doctor/diagnosis/sinusitis
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer {{authToken}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="diagnosticianId"
+
+your_user_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="patientId"
+
+patient_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="additionalInformation"
+
+Patient complains of nasal congestion and facial pain
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="watersViewXrayImage"; filename="waters-view-xray.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/waters-view-xray.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Pharyngitis Diagnosis
+# Note: For file uploads, you'll need to use a tool like Postman
+# This is a simplified version for reference
+POST {{baseUrl}}/api/doctor/diagnosis/pharyngitis
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer {{authToken}}
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="diagnosticianId"
+
+your_user_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="patientId"
+
+patient_id_here
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="additionalInformation"
+
+Patient complains of sore throat and difficulty swallowing
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="throatImage"; filename="throat-image.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/throat-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Get Sinusitis Reports
+GET {{baseUrl}}/api/doctor/diagnosis/sinusitis/reports
+Authorization: Bearer {{authToken}}
+
+### Get All Sinusitis Diagnoses
+GET {{baseUrl}}/api/doctor/diagnosis/sinusitis
+Authorization: Bearer {{authToken}}
+
+### Get Cholesteatoma Reports
+GET {{baseUrl}}/api/doctor/diagnosis/cholesteatoma/reports
+Authorization: Bearer {{authToken}}
+
+### Get All Cholesteatoma Diagnoses
+GET {{baseUrl}}/api/doctor/diagnosis/cholesteatoma
+Authorization: Bearer {{authToken}}
+
+### Get Pharyngitis Reports
+GET {{baseUrl}}/api/doctor/diagnosis/pharyngitis/reports
+Authorization: Bearer {{authToken}}
+
+### Get All Pharyngitis Diagnoses
+GET {{baseUrl}}/api/doctor/diagnosis/pharyngitis
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### Payment System
+### =============================================
+
+### =============================================
+### Package Management
+### =============================================
+
+### Get All Packages (Public)
+GET {{baseUrl}}/api/packages
+Content-Type: application/json
+
+### Get All Packages (Admin)
+GET {{baseUrl}}/api/admin/packages
+Authorization: Bearer {{authToken}}
+
+### Create Package
+POST {{baseUrl}}/api/admin/packages
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Basic Plan",
+  "dailyRequestLimit": 50,
+  "durationInDays": 30,
+  "price": 9.99,
+  "isUnlimited": false,
+  "description": "Basic plan with limited API access"
+}
+
+### Get Package by ID
+# Replace {packageId} with an actual package ID
+GET {{baseUrl}}/api/admin/packages/68334de47d62cb43d9de2b03
+Authorization: Bearer {{authToken}}
+
+### Update Package
+# Replace {packageId} with an actual package ID
+PUT {{baseUrl}}/api/admin/packages/68334de47d62cb43d9de2b03
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Basic Plan Updated",
+  "dailyRequestLimit": 75,
+  "price": 12.99,
+  "description": "Updated basic plan with more API access"
+}
+
+### Set Package Status (Activate/Deactivate)
+# Replace {packageId} with an actual package ID
+PATCH {{baseUrl}}/api/admin/packages/68334de47d62cb43d9de2b03/status
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "isActive": true
+}
+
+### Delete Package
+# Replace {packageId} with an actual package ID
+DELETE {{baseUrl}}/api/admin/packages/68334de47d62cb43d9de2b03
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### User Plan Management
+### =============================================
+
+### Get All User Plans (Admin)
+GET {{baseUrl}}/api/admin/purchased-plans
+Authorization: Bearer {{authToken}}
+
+### Get Active User Plans (Admin)
+GET {{baseUrl}}/api/admin/purchased-plans?active=true
+Authorization: Bearer {{authToken}}
+
+### Create User Plan (Admin)
+POST {{baseUrl}}/api/admin/purchased-plans
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "user": "userId",
+  "package": "68334de47d62cb43d9de2b03",
+  "startDate": "2023-06-01T00:00:00.000Z",
+  "endDate": "2023-07-01T00:00:00.000Z",
+  "paymentMethod": "credit_card",
+  "transactionId": "txn_123456789"
+}
+
+### Get User Plan by ID (Admin)
+# Replace {planId} with an actual plan ID
+GET {{baseUrl}}/api/admin/purchased-plans/{planId}
+Authorization: Bearer {{authToken}}
+
+### Get User Plans by User ID (Admin)
+# Replace {userId} with an actual user ID
+GET {{baseUrl}}/api/admin/purchased-plans/user/{userId}
+Authorization: Bearer {{authToken}}
+
+### Update User Plan (Admin)
+# Replace {planId} with an actual plan ID
+PUT {{baseUrl}}/api/admin/purchased-plans/{planId}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "endDate": "2023-08-01T00:00:00.000Z",
+  "isActive": true
+}
+
+### Cancel User Plan (Admin)
+# Replace {planId} with an actual plan ID
+DELETE {{baseUrl}}/api/admin/purchased-plans/{planId}
+Authorization: Bearer {{authToken}}
+
+### Get Expired Plans (Admin)
+GET {{baseUrl}}/api/admin/purchased-plans/expired
+Authorization: Bearer {{authToken}}
+
+### Deactivate Expired Plans (Admin)
+POST {{baseUrl}}/api/admin/purchased-plans/deactivate-expired
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### User Plan Operations (Authenticated User)
+### =============================================
+
+### Get Active Plan
+GET {{baseUrl}}/api/auth/active-plan
+Authorization: Bearer {{authToken}}
+
+### Get My Plans
+GET {{baseUrl}}/api/auth/my-plans
+Authorization: Bearer {{authToken}}
+
+### Purchase Package
+POST {{baseUrl}}/api/auth/purchase-package
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "packageId": "packageId",
+  "paymentMethod": "credit_card",
+  "transactionId": "txn_123456789"
+}
+
+### Cancel Plan
+# Replace {planId} with an actual plan ID
+DELETE {{baseUrl}}/api/auth/cancel-plan/{planId}
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### Role Access Policies
+### =============================================
+
+### Get All Role Access Policies
+GET {{baseUrl}}/api/admin/role-access-policies
+Authorization: Bearer {{authToken}}
+
+### Initialize Role Access Policies
+POST {{baseUrl}}/api/admin/role-access-policies/initialize
+Authorization: Bearer {{authToken}}
+
+### Reset Role Access Policies
+POST {{baseUrl}}/api/admin/role-access-policies/reset
+Authorization: Bearer {{authToken}}
+
+### Get Role Access Policy by Role
+# Replace {role} with an actual role (admin, doctor, student, etc.)
+GET {{baseUrl}}/api/admin/role-access-policies/{role}
+Authorization: Bearer {{authToken}}
+
+### Update Role Access Policy
+# Replace {role} with an actual role (admin, doctor, student, etc.)
+PUT {{baseUrl}}/api/admin/role-access-policies/{role}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "hasUnlimitedAccess": false,
+  "requiresPackage": true,
+  "description": "Updated policy for role"
+}
+
+### Check if Role Has Unlimited Access
+# Replace {role} with an actual role (admin, doctor, student, etc.)
+GET {{baseUrl}}/api/admin/role-access-policies/{role}/has-unlimited-access
+Authorization: Bearer {{authToken}}
+
+### Check if Role Requires Package
+# Replace {role} with an actual role (admin, doctor, student, etc.)
+GET {{baseUrl}}/api/admin/role-access-policies/{role}/requires-package
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### Reports
+### =============================================
+
+### Get API Usage by User
+GET {{baseUrl}}/api/admin/reports/plans/api-usage/by-user
+Authorization: Bearer {{authToken}}
+
+### Get API Usage by User (with date range)
+GET {{baseUrl}}/api/admin/reports/plans/api-usage/by-user?startDate=2023-01-01&endDate=2023-12-31
+Authorization: Bearer {{authToken}}
+
+### Get API Usage by Endpoint
+GET {{baseUrl}}/api/admin/reports/plans/api-usage/by-endpoint
+Authorization: Bearer {{authToken}}
+
+### Get All API Usage
+GET {{baseUrl}}/api/admin/reports/plans/api-usage
+Authorization: Bearer {{authToken}}
+
+### Get All API Usage (with date range)
+GET {{baseUrl}}/api/admin/reports/plans/api-usage?startDate=2023-01-01&endDate=2023-12-31
+Authorization: Bearer {{authToken}}
+
+### Get Purchase History
+GET {{baseUrl}}/api/admin/reports/plans/purchase-history
+Authorization: Bearer {{authToken}}
+
+### Get User Plan Status
+GET {{baseUrl}}/api/admin/reports/plans/user-plans/status
+Authorization: Bearer {{authToken}}
+
+### Get User API Usage
+# Replace {userId} with an actual user ID
+GET {{baseUrl}}/api/admin/reports/plans/user/{userId}/api-usage
+Authorization: Bearer {{authToken}}
+
+### =============================================
+### Admin
+### =============================================
+
+### Get All Users
+GET {{baseUrl}}/api/admin/users
+Authorization: Bearer {{authToken}}
+
+### Get User by ID
+# Replace {userId} with an actual user ID
+GET {{baseUrl}}/api/admin/users/{userId}
+Authorization: Bearer {{authToken}}
+
+### Update User
+# Replace {userId} with an actual user ID
+PUT {{baseUrl}}/api/admin/users/{userId}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Updated Name",
+  "email": "updated.email@example.com",
+  "role": "doctor"
+}
+
+### Delete User
+# Replace {userId} with an actual user ID
+DELETE {{baseUrl}}/api/admin/users/{userId}
+Authorization: Bearer {{authToken}}

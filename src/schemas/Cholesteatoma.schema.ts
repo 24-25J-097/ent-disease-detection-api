@@ -30,6 +30,10 @@ export const CholesteatomaSchema = new mongoose.Schema({
         type:  Schema.Types.String,
         required: false
     },
+    isLearningPurpose: {
+        type:  Schema.Types.Boolean,
+        required: false
+    },
     endoscopyImage: {
         type: Schema.Types.ObjectId,
         required: true,

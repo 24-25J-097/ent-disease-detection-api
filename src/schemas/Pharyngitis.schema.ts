@@ -30,6 +30,10 @@ export const PharyngitisSchema = new mongoose.Schema({
         type: Schema.Types.String,
         required: false
     },
+    isLearningPurpose: {
+        type: Schema.Types.Boolean,
+        required: false
+    },
     throatImage: {
         type: Schema.Types.ObjectId,
         required: true,

@@ -6,6 +6,7 @@ interface CommonAttributes {
     patientId: StringOrObjectId;
     additionalInformation?: string;
     endoscopyImage: mongoose.Schema.Types.ObjectId;
+    isLearningPurpose: boolean;
     diagnosisResult?: {
         isCholesteatoma?: boolean;
         stage?: string;

@@ -11,5 +11,11 @@ export async function createProfile(data: DUser & Partial<DStudent>, remember: b
     const student = await iStudent.save();
     AppLogger.info(`Create profile for user ID: ${student._id}`);
     // sendEmail({type: EmailType.CREATE_USER, to: data.email}); // TODO fire event to send emails
-    return await UserDao.authenticateUser(data.email, data.password, data.signedUpAs, authTokenValidity(remember));
+    return await UserDao.authenticateUser(
+        data.email,
+        data.password,
+        data.signedUpAs,
+        authTokenValidity(remember),
+        true
+    );
 }
