@@ -296,10 +296,10 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "user": "userId",
+  "user_id": "68353780f61db45049d0a3a3",
   "package": "68334de47d62cb43d9de2b03",
-  "startDate": "2023-06-01T00:00:00.000Z",
-  "endDate": "2023-07-01T00:00:00.000Z",
+  "startDate": "2025-06-01T00:00:00.000Z",
+  "endDate": "2025-07-01T00:00:00.000Z",
   "paymentMethod": "credit_card",
   "transactionId": "txn_123456789"
 }
@@ -311,7 +311,7 @@ Authorization: Bearer {{authToken}}
 
 ### Get User Plans by User ID (Admin)
 # Replace {userId} with an actual user ID
-GET {{baseUrl}}/api/admin/purchased-plans/user/{userId}
+GET {{baseUrl}}/api/admin/purchased-plans/user/68353780f61db45049d0a3a3
 Authorization: Bearer {{authToken}}
 
 ### Update User Plan (Admin)

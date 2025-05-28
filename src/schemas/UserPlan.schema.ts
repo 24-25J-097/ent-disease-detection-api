@@ -1,13 +1,28 @@
 import * as mongoose from "mongoose";
 import {IUserPlan} from "../models/UserPlan.model";
 
+const UserPlanSchemaOptions: mongoose.SchemaOptions = {
+    _id: true,
+    id: false,
+    timestamps: true,
+    skipVersioning: {
+        updatedAt: true
+    },
+    strict: false,
+    toJSON: {
+        getters: true,
+        virtuals: true,
+    },
+    toObject: { virtuals: true }
+};
+
 export const UserPlanSchema = new mongoose.Schema({
-    user: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users',
         required: true
     },
-    package: {
+    package_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Package',
         required: true
@@ -49,12 +64,26 @@ export const UserPlanSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-}, {
-    timestamps: true
-});
+}, UserPlanSchemaOptions);
 
 // Index for efficient queries
-UserPlanSchema.index({user: 1, isActive: 1});
+UserPlanSchema.index({user_id: 1, isActive: 1});
 UserPlanSchema.index({endDate: 1});
+
+UserPlanSchema.virtual('user', {
+    ref: 'users', // the collection/model name
+    localField: 'user_id',
+    foreignField: '_id',
+    justOne: true, // default is false
+    // match: {archived: false}
+});
+
+UserPlanSchema.virtual('package', {
+    ref: 'Package', // the collection/model name
+    localField: 'package_id',
+    foreignField: '_id',
+    justOne: true, // default is false
+    // match: {archived: false}
+});
 
 export const UserPlan = mongoose.model<IUserPlan>("UserPlan", UserPlanSchema);

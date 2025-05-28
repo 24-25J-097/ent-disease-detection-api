@@ -147,8 +147,8 @@ export async function getUserPlanStatus(req: Request, res: Response) {
                 $gte: now,
                 $lte: nextWeek
             }
-        }).populate('user', 'name email role')
-            .populate('package', 'name');
+        }).populate('user', 'user_id name email role')
+            .populate('package', 'package_id name');
 
         res.sendSuccess({
             summary: {
