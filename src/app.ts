@@ -61,6 +61,10 @@ if (!isProduction) {
 app.use(favicon(favPath.join(__dirname, "../resources", "favicon.ico")));
 app.use('/api/static', express.static(favPath.join(__dirname, "../resources")));
 
+// Serve API documentation
+app.use(express.static(favPath.join(__dirname, "public")));
+app.use('/docs', express.static(favPath.join(__dirname, "public/docs")));
+
 // Initialize role access policies
 (async () => {
     try {

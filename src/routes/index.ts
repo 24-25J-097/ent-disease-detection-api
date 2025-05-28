@@ -5,6 +5,7 @@ import createHttpError from "http-errors";
 import {DoctorRoutesInit} from "./doctor";
 import {PatientRoutesInit} from "./patient";
 import {StudentRoutesInit} from "./student";
+import path from "path";
 
 
 export function initRoutes(app: Express) {
@@ -17,9 +18,9 @@ export function initRoutes(app: Express) {
     StudentRoutesInit(app);
     PatientRoutesInit(app);
 
-    /* INVALID REQUESTS */
-    app.get('/', (req: Request, res: Response) => res.redirect(301, "/api"));
-    app.use((req, res, next) => next(new createHttpError.NotFound()));
-    // app.all('*', (req: Request, res: Response) => res.send("Invalid Route").status(404));
+    /* DOCUMENTATION */
+    app.get('/', (req: Request, res: Response) => res.sendFile(path.join(__dirname, '../public/docs/index.html')));
 
+    /* INVALID REQUESTS */
+    app.use((req, res, next) => next(new createHttpError.NotFound()));
 }
