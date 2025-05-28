@@ -3,6 +3,7 @@ export enum EmailType {
     CREATE_USER = 1,
     DEACTIVATE_USER = 2,
     NOTIFICATION = 3,
+    CONTACT_US = 4,
 }
 
 export enum APIOperation {
