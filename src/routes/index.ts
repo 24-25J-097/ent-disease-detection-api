@@ -5,6 +5,7 @@ import createHttpError from "http-errors";
 import {DoctorRoutesInit} from "./doctor";
 import {PatientRoutesInit} from "./patient";
 import {StudentRoutesInit} from "./student";
+import {NotificationRoutesInit} from "./notification";
 
 
 export function initRoutes(app: Express) {
@@ -16,6 +17,7 @@ export function initRoutes(app: Express) {
     DoctorRoutesInit(app);
     StudentRoutesInit(app);
     PatientRoutesInit(app);
+    NotificationRoutesInit(app);
 
     /* INVALID REQUESTS */
     app.get('/', (req: Request, res: Response) => res.redirect(301, "/api"));
