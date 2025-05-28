@@ -2,10 +2,11 @@ import {Express, Request, Response} from "express";
 import {AdminRoutesInit} from "./admin";
 import {AuthRoutesInit} from "./auth";
 import createHttpError from "http-errors";
+import path from "path";
 import {DoctorRoutesInit} from "./doctor";
 import {PatientRoutesInit} from "./patient";
 import {StudentRoutesInit} from "./student";
-import path from "path";
+import {NotificationRoutesInit} from "./notification";
 
 
 export function initRoutes(app: Express) {
@@ -17,6 +18,7 @@ export function initRoutes(app: Express) {
     DoctorRoutesInit(app);
     StudentRoutesInit(app);
     PatientRoutesInit(app);
+    NotificationRoutesInit(app);
 
     /* DOCUMENTATION */
     app.get('/', (req: Request, res: Response) => res.sendFile(path.join(__dirname, '../public/docs/index.html')));
