@@ -7,6 +7,7 @@ import connectDatabase from "./startup/database";
 import passportStartup from "./startup/passport";
 import env from "./utils/validate-env";
 import {AppLogger, ErrorLogger} from "./utils/logging";
+import {RoleAccessPolicyDAO} from "./dao/RoleAccessPolicy.dao";
 
 // Load environment variables
 const isProduction = process.env.NODE_ENV === "production";
@@ -40,6 +41,15 @@ connectDatabase()
         server.listen(port, () => {
             AppLogger.info('--> 3. Server successfully started at port: ' + port);
             AppLogger.info('================================================ \n');
+
+            // Initialize role access policies
+            (async () => {
+                try {
+                    await RoleAccessPolicyDAO.initialize();
+                } catch (error) {
+                    console.error('Error initializing role access policies:', error);
+                }
+            })();
         });
     })
     .catch(error => {
