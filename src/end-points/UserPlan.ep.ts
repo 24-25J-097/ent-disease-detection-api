@@ -14,9 +14,8 @@ import {PaymentStatus} from "../models/UserPlan.model";
 export async function createUserPlan(req: Request, res: Response) {
     try {
         const planData = req.body;
-
         // Validate required fields
-        if (!planData.user || !planData.package || !planData.endDate) {
+        if (!planData.user_id || !planData.package || !planData.endDate) {
             throw createHttpError(400, "Missing required fields");
         }
 
@@ -36,7 +35,7 @@ export async function createUserPlan(req: Request, res: Response) {
 
         const newUserPlan = await UserPlanDAO.create(planData);
 
-        AppLogger.info(`User plan created for user: ${planData.user}`);
+        AppLogger.info(`User plan created for user: ${planData.user_id}`);
         res.sendSuccess(newUserPlan);
     } catch (error: any) {
         AppLogger.error(`Create user plan error: ${error.message}`);
@@ -55,7 +54,7 @@ export async function purchasePackage(req: Request, res: Response) {
         const user = req.user as IUser;
 
         if (!packageId) {
-            throw createHttpError(400, "Package ID is required");
+            throw createHttpError(422, "Package ID is required");
         }
 
         // Check if package exists and is active
@@ -65,17 +64,21 @@ export async function purchasePackage(req: Request, res: Response) {
         }
 
         if (!packageData.isActive) {
-            throw createHttpError(400, "This package is not currently available");
+            throw createHttpError(422, "This package is not currently available");
         }
 
+        const activePlan = await UserPlanDAO.getActiveUserPlan(user._id);
+        if (activePlan) {
+            throw createHttpError(422, "You already have an active plan");
+        }
         // Create user plan
         const startDate = new Date();
         const endDate = new Date(startDate);
         endDate.setDate(endDate.getDate() + packageData.durationInDays);
 
         const planData = {
-            user: user._id,
-            package: packageId,
+            user_id: user._id,
+            package_id: packageId,
             startDate,
             endDate,
             isActive: true,
@@ -88,7 +91,7 @@ export async function purchasePackage(req: Request, res: Response) {
         const newUserPlan = await UserPlanDAO.create(planData);
 
         AppLogger.info(`Package purchased by user: ${user._id}`);
-        res.sendSuccess(newUserPlan);
+        res.sendSuccess(newUserPlan, "You have successfully purchased a package. Your plan will be activated shortly. Thank you for your business!", 201);
     } catch (error: any) {
         AppLogger.error(`Purchase package error: ${error.message}`);
 
@@ -122,11 +125,11 @@ export async function getUserPlans(req: Request, res: Response) {
         let userId;
 
         // If this is the /my-plans route, use the authenticated user's ID
-        if (req.originalUrl.includes('/my-plans')) {
+        if (req.originalUrl.includes('admin/purchased-plans/user/')) {
+            userId = req.params.userId;
+        } else {
             const user = req.user as IUser;
             userId = user._id;
-        } else {
-            userId = req.params.userId;
         }
 
         const activeOnly = req.query.active === 'true';
@@ -219,7 +222,7 @@ export async function cancelUserPlan(req: Request, res: Response) {
                 throw createHttpError(404, "User plan not found");
             }
 
-            if (plan.user.toString() !== user._id.toString()) {
+            if (plan.user_id.toString() !== user._id.toString()) {
                 throw createHttpError(403, "You can only cancel your own plans");
             }
         }

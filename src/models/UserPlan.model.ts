@@ -7,8 +7,8 @@ export type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded';
 
 export interface DUserPlan {
     _id?: StringOrObjectId;
-    user: StringOrObjectId;
-    package: mongoose.Types.ObjectId | IPackage;
+    user_id: StringOrObjectId;
+    package_id: StringOrObjectId;
     startDate: Date;
     endDate: Date;
     isActive: boolean;

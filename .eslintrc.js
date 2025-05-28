@@ -20,6 +20,8 @@ module.exports = {
     ],
     "rules": {
         '@typescript-eslint/no-var-requires': 0,
-        "@typescript-eslint/no-namespace": "off"
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-throw-literal": "off"
     }
 }

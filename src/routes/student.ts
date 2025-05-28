@@ -3,6 +3,7 @@ import * as DiagnosisEp from "../end-points/CholesteatomaDiagnosis.ep";
 import * as SinusitisDiagnosisEp from "../end-points/SinusitisDiagnosis.ep";
 import {upload} from "../middleware/upload";
 import * as PharyngitisDiagnosisEp from "../end-points/PharyngitisDiagnosis.ep";
+import * as PackageEp from "../end-points/Package.ep";
 
 
 export function StudentRoutesInit(app: Express) {
@@ -22,4 +23,7 @@ export function StudentRoutesInit(app: Express) {
     app.post('/api/student/diagnosis/pharyngitis/accept', PharyngitisDiagnosisEp.pharyngitisDiagnosisAccept);
     app.get('/api/student/diagnosis/pharyngitis/image/:_id', PharyngitisDiagnosisEp.pharyngitisImage);
 
+    /* PRICING ROUTES  ===================================== */
+    // Plans
+    app.get("/api/student/packages", PackageEp.getAllPackages);
 }

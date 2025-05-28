@@ -2,17 +2,19 @@ import {Express, Request, Response} from "express";
 import {AdminRoutesInit} from "./admin";
 import {AuthRoutesInit} from "./auth";
 import createHttpError from "http-errors";
-import path from "path";
 import {DoctorRoutesInit} from "./doctor";
 import {PatientRoutesInit} from "./patient";
 import {StudentRoutesInit} from "./student";
+import {PublicRoutesInit} from "./public";
 import {NotificationRoutesInit} from "./notification";
+import path from "path";
 
 
 export function initRoutes(app: Express) {
     /* TOP LEVEL REQUESTS */
     app.get('/api', (req: Request, res: Response) => res.sendSuccess("ENT Insight - REST API"));
 
+    PublicRoutesInit(app);
     AuthRoutesInit(app);
     AdminRoutesInit(app);
     DoctorRoutesInit(app);

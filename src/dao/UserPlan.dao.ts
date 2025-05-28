@@ -16,14 +16,14 @@ export class UserPlanDAO {
     static async create(userPlanData: DUserPlan): Promise<IUserPlan> {
         try {
             // Check if package exists
-            const packageExists = await Package.exists({_id: userPlanData.package});
+            const packageExists = await Package.exists({_id: userPlanData.package_id});
             if (!packageExists) {
-                throw createHttpError(404, `Package with ID '${userPlanData.package}' not found`);
+                throw createHttpError(404, `Package with ID '${userPlanData.package_id}' not found`);
             }
 
             // Deactivate any active plans for this user
             await UserPlan.updateMany(
-                {user: userPlanData.user, isActive: true},
+                {user_id: userPlanData.user_id, isActive: true},
                 {isActive: false, updatedAt: new Date()}
             );
 
@@ -47,13 +47,13 @@ export class UserPlanDAO {
         try {
             const query = activeOnly ? {isActive: true} : {};
             const userPlans = await UserPlan.find(query)
-                .populate('user', 'name email role')
-                .populate('package', 'name dailyRequestLimit durationInDays price isUnlimited')
+                .populate('user', 'user_id name email role')
+                .populate('package', 'package_id name dailyRequestLimit durationInDays price isUnlimited')
                 .sort({createdAt: -1});
 
             // Add today's usage count for each user
             return await Promise.all(userPlans.map(async (plan) => {
-                const userId = plan.user._id || plan.user;
+                const userId = plan.user?._id || plan.user_id;
                 const usageToday = await RequestLogDAO.countTodayRequests(userId);
 
                 // Convert to plain object to add the new property
@@ -79,13 +79,14 @@ export class UserPlanDAO {
      */
     static async getByUserId(userId: StringOrObjectId, activeOnly = false): Promise<IUserPlan[]> {
         try {
-            const query: any = {user: userId};
+            const query: any = {user_id: userId};
             if (activeOnly) {
                 query.isActive = true;
             }
-
+            console.log(query)
             return await UserPlan.find(query)
-                .populate('package', 'name dailyRequestLimit durationInDays price isUnlimited')
+                .populate('user')
+                .populate('package', 'package_id name dailyRequestLimit durationInDays price isUnlimited')
                 .sort({createdAt: -1});
         } catch (error) {
             if (error instanceof Error) {
@@ -104,8 +105,8 @@ export class UserPlanDAO {
     static async getById(id: StringOrObjectId): Promise<IUserPlan | null> {
         try {
             return await UserPlan.findById(id)
-                .populate('user', 'name email role')
-                .populate('package', 'name dailyRequestLimit durationInDays price isUnlimited');
+                .populate('user', 'user_id name email role')
+                .populate('package', 'package_id name dailyRequestLimit durationInDays price isUnlimited');
         } catch (error) {
             if (error instanceof Error) {
                 AppLogger.error(`Get User Plan by id: ${error.message}`);
@@ -125,11 +126,11 @@ export class UserPlanDAO {
             const now = new Date();
 
             return await UserPlan.findOne({
-                user: userId,
+                user_id: userId,
                 isActive: true,
                 startDate: {$lte: now},
                 endDate: {$gte: now}
-            }).populate('package', 'name dailyRequestLimit durationInDays price isUnlimited');
+            }).populate('package', 'package_id name dailyRequestLimit durationInDays price isUnlimited');
         } catch (error) {
             if (error instanceof Error) {
                 AppLogger.error(`Get Active user plans: ${error.message}`);
@@ -148,10 +149,10 @@ export class UserPlanDAO {
     static async update(id: StringOrObjectId, userPlanData: Partial<DUserPlan>): Promise<IUserPlan | null> {
         try {
             // If changing package, check if it exists
-            if (userPlanData.package) {
-                const packageExists = await Package.exists({_id: userPlanData.package});
+            if (userPlanData.package_id) {
+                const packageExists = await Package.exists({_id: userPlanData.package_id});
                 if (!packageExists) {
-                    throw createHttpError(404, `Package with ID '${userPlanData.package}' not found`);
+                    throw createHttpError(404, `Package with ID '${userPlanData.package_id}' not found`);
                 }
             }
 
@@ -159,7 +160,7 @@ export class UserPlanDAO {
                 id,
                 {...userPlanData, updatedAt: new Date()},
                 {new: true, runValidators: true}
-            ).populate('package', 'name dailyRequestLimit durationInDays price isUnlimited');
+            ).populate('package', 'package_id name dailyRequestLimit durationInDays price isUnlimited');
         } catch (error) {
             if (error instanceof Error) {
                 AppLogger.error(`Update User plan: ${error.message}`);
@@ -201,8 +202,8 @@ export class UserPlanDAO {
             return await UserPlan.find({
                 isActive: true,
                 endDate: {$lt: now}
-            }).populate('user', 'name email role')
-                .populate('package', 'name');
+            }).populate('user', 'user_id name email role')
+                .populate('package', 'package_id name');
         } catch (error) {
             if (error instanceof Error) {
                 AppLogger.error(`Get expired user plans: ${error.message}`);
