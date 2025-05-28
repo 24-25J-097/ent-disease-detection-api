@@ -25,3 +25,15 @@ export interface EmailNotificationData {
     subject: string,
     message: string,
 }
+
+export interface ContactUsEmailData {
+    name: string,
+    email: string,
+    phone: string,
+    subject: string,
+    message: string,
+    additionalInfo: string,
+    submissionTime: string,
+    ipAddress: string,
+    domain: string,
+}
