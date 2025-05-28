@@ -6,12 +6,14 @@ import {DoctorRoutesInit} from "./doctor";
 import {PatientRoutesInit} from "./patient";
 import {StudentRoutesInit} from "./student";
 import path from "path";
+import {PublicRoutesInit} from "./public";
 
 
 export function initRoutes(app: Express) {
     /* TOP LEVEL REQUESTS */
     app.get('/api', (req: Request, res: Response) => res.sendSuccess("ENT Insight - REST API"));
 
+    PublicRoutesInit(app);
     AuthRoutesInit(app);
     AdminRoutesInit(app);
     DoctorRoutesInit(app);
