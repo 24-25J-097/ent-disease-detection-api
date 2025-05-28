@@ -65,14 +65,7 @@ app.use('/api/static', express.static(favPath.join(__dirname, "../resources")));
 app.use(express.static(favPath.join(__dirname, "public")));
 app.use('/docs', express.static(favPath.join(__dirname, "public/docs")));
 
-// Initialize role access policies
-(async () => {
-    try {
-        await RoleAccessPolicyDAO.initialize();
-    } catch (error) {
-        console.error('Error initializing role access policies:', error);
-    }
-})();
+
 
 // Authentication middleware for all protected routes
 app.use('/api/auth', Authentication.verifyToken);
