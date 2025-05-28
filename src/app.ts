@@ -23,7 +23,7 @@ app.use(ResponseHandler);
 app.use(express.json({limit: '20mb'}));
 app.use(express.urlencoded({limit: '20mb', extended: true}));
 
-const defaultOrigins = ['https://entinsight.com', 'https://www.entinsight.com', 'http://localhost:3000'];
+const defaultOrigins = ['https://entinsight.com', 'https://www.entinsight.com', 'https://research.entinsight.com', 'http://localhost:3000'];
 
 if (!isProduction) {
     const allowedOrigin = process.env.ALLOWED_ORIGIN;
