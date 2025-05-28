@@ -224,7 +224,12 @@ Authorization: Bearer {{authToken}}
 ### =============================================
 
 ### Get All Packages (Public)
-GET {{baseUrl}}/api/packages
+GET {{baseUrl}}/api/public/packages
+Content-Type: application/json
+
+### Get All Packages (Student)
+GET {{baseUrl}}/api/student/packages
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 ### Get All Packages (Admin)

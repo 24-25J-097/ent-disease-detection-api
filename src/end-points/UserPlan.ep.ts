@@ -54,7 +54,7 @@ export async function purchasePackage(req: Request, res: Response) {
         const user = req.user as IUser;
 
         if (!packageId) {
-            throw createHttpError(400, "Package ID is required");
+            throw createHttpError(422, "Package ID is required");
         }
 
         // Check if package exists and is active
@@ -64,9 +64,13 @@ export async function purchasePackage(req: Request, res: Response) {
         }
 
         if (!packageData.isActive) {
-            throw createHttpError(400, "This package is not currently available");
+            throw createHttpError(422, "This package is not currently available");
         }
 
+        const activePlan = await UserPlanDAO.getActiveUserPlan(user._id);
+        if (activePlan) {
+            throw createHttpError(422, "You already have an active plan");
+        }
         // Create user plan
         const startDate = new Date();
         const endDate = new Date(startDate);
@@ -87,7 +91,7 @@ export async function purchasePackage(req: Request, res: Response) {
         const newUserPlan = await UserPlanDAO.create(planData);
 
         AppLogger.info(`Package purchased by user: ${user._id}`);
-        res.sendSuccess(newUserPlan);
+        res.sendSuccess(newUserPlan, "You have successfully purchased a package. Your plan will be activated shortly. Thank you for your business!", 201);
     } catch (error: any) {
         AppLogger.error(`Purchase package error: ${error.message}`);
 
