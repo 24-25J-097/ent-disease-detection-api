@@ -12,7 +12,6 @@ import * as favPath from 'path';
 import {Role} from "./enums/auth";
 import {verifyRole} from "./middleware/verify-role";
 import {apiAccessControl} from "./middleware/api-access-control";
-import {RoleAccessPolicyDAO} from "./dao/RoleAccessPolicy.dao";
 
 const isProduction = process.env.NODE_ENV === "production";
 const app = express();
@@ -23,7 +22,7 @@ app.use(ResponseHandler);
 app.use(express.json({limit: '20mb'}));
 app.use(express.urlencoded({limit: '20mb', extended: true}));
 
-const defaultOrigins = ['https://entinsight.com', 'https://www.entinsight.com', 'https://research.entinsight.com', 'http://localhost:3000'];
+const defaultOrigins = ['https://entinsight.com', 'https://www.entinsight.com', 'https://research.entinsight.com'];
 
 if (!isProduction) {
     const allowedOrigin = process.env.ALLOWED_ORIGIN;
@@ -66,7 +65,6 @@ app.use(express.static(favPath.join(__dirname, "public")));
 app.use('/docs', express.static(favPath.join(__dirname, "public/docs")));
 
 
-
 // Authentication middleware for all protected routes
 app.use('/api/auth', Authentication.verifyToken);
 
@@ -94,8 +92,14 @@ app.use('/api/admin', Authentication.verifyToken, verifyRole([Role.ADMIN]));
 // Role-specific routes with API access control
 app.use('/api/doctor', Authentication.verifyToken, verifyRole([Role.DOCTOR]), apiAccessControl);
 app.use('/api/radiologist', Authentication.verifyToken, verifyRole([Role.RADIOLOGIST]), apiAccessControl);
-app.use('/api/student', Authentication.verifyToken, verifyRole([Role.STUDENT]), apiAccessControl);
 app.use('/api/patient', Authentication.verifyToken, verifyRole([Role.PATIENT]), apiAccessControl);
+app.use('/api/student', Authentication.verifyToken, verifyRole([Role.STUDENT]), (req, res, next) => {
+    if (req.path === '/packages') {
+        return next()
+    }
+    return apiAccessControl(req, res, next);
+});
+
 routes.initRoutes(app);
 
 // Error Handling
